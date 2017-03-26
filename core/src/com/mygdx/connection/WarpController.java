@@ -2,6 +2,7 @@ package com.mygdx.connection;
 
 import com.mygdx.game.Berek;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
+import com.shephertz.app42.gaming.multiplayer.client.listener.LobbyRequestListener;
 
 public class WarpController {
 	
@@ -44,6 +45,8 @@ public class WarpController {
 		WarpClient.getInstance().addRoomRequestListener(new RoomListener(game));  
 		
 		WarpClient.getInstance().addNotificationListener(new NotificationListener(game));
+		
+		WarpClient.getInstance().addLobbyRequestListener(new LobbyRequestListener(game));
 		
 	}
 	

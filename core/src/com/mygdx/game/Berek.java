@@ -105,7 +105,9 @@ public class Berek extends Game {
 		skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));		
 		
 		menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/backgroundMenuMusic.mp3"));
-		menuMusic.setLooping(true);;
+		
+		menuMusic.setLooping(true);
+		
 		menuMusic.play();
 		
 		tuchpad = new AnalogStick();
@@ -115,6 +117,7 @@ public class Berek extends Game {
 		player2 = new Player(false);
 		
 		player1.setPosition(0, 0);
+		
 		player2.setPosition(670, 1220);
 		
 		warpController = new WarpController(this);

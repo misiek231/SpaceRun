@@ -72,6 +72,13 @@ public class MenuScreen extends AbstractScreen {
 		
 	private void checkStart() {
 		
+		try {
+			
+			WarpClient.getInstance().getLiveLobbyInfo();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		if(game.start)
 			game.setScreen(new GameScreen(game));		
 	}
@@ -170,7 +177,13 @@ public class MenuScreen extends AbstractScreen {
 					
 					try {
 					game.wyzwanie = false;
-						WarpClient.getInstance().joinRoomInRange(0, 2, false);
+					
+						WarpClient.getInstance().joinLobby();
+						
+						WarpClient.getInstance().subscribeLobby();
+						
+						WarpClient.getInstance().getLiveLobbyInfo();
+						
 					
 					} catch (Exception e) {
 
