@@ -106,7 +106,7 @@ public class RandomObjectsControler {
 		
 		for (RandomObject randomObject : randomObjects) {
 			
-			if(game.player1.overlaps(randomObject)){
+/*			if(game.player1.overlaps(randomObject)){
 				
 				randomObject.addEffectsToPlayers(game.player1 , game.player2);	
 				randomObject.exist = false;
@@ -116,7 +116,7 @@ public class RandomObjectsControler {
 				
 				randomObject.addEffectsToPlayers(game.player2, game.player1);		
 				randomObject.exist = false;
-			}
+			}*/
 			
 			System.out.println("rysowanie " + randomObject.getX());
 		

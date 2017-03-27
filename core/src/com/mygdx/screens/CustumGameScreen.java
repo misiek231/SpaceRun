@@ -59,8 +59,8 @@ public class CustumGameScreen extends AbstractScreen {
 	
 	private void connectingResult() {
 		
-		if(game.start)
-			game.setScreen(new GameScreen(game));	
+		//if(game.start)
+		//	game.setScreen(new GameScreen(game));	
 	}
 
 	private void connecting() {
@@ -155,9 +155,9 @@ public class CustumGameScreen extends AbstractScreen {
 				
 				try {
 					
-					game.wyzwanie = true;
+			/*		game.wyzwanie = true;
 					
-					game.searchedUserName = name.getText();
+					game.searchedUserName = name.getText();*/
 					
 					WarpClient.getInstance().getOnlineUsers();
 					

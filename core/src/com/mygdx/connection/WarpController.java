@@ -2,20 +2,22 @@ package com.mygdx.connection;
 
 import com.mygdx.game.Berek;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
-import com.shephertz.app42.gaming.multiplayer.client.listener.LobbyRequestListener;
+
 
 public class WarpController {
-	
-	//public WarpClient warpClient;
-	
-	Berek game;
 
-	public WarpController(Berek game){
+	Berek game;
+	
+	ConnectionController connectionController;
+	
+	public WarpController(Berek game, ConnectionController connectionController){
 		
 		this.game = game;
 		
-		initWarp();
+		this.connectionController = connectionController;
 		
+		initWarp();
+			
 		try {
 			
 			addEvents();
@@ -23,8 +25,7 @@ public class WarpController {
 		} catch (Exception e) {
 			
 			e.printStackTrace();
-		}
-		
+		}		
 	}
 	
 	private void initWarp() {
@@ -52,7 +53,7 @@ public class WarpController {
 	
 	public void dispose() throws Exception{  
 		  		
-		WarpClient.getInstance().deleteRoom(game.roomId);
+		WarpClient.getInstance().deleteRoom(connectionController.roomId);
 	
 		WarpClient.getInstance().disconnect();	 
 	}	

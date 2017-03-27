@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Berek;
 
 @SuppressWarnings("serial")
@@ -16,6 +18,9 @@ public class Player extends Rectangle{
 	public float playerSpeed = 7;
 	public boolean checkReflection = true;
 
+	public Label playerNickLabel;
+
+	
 	
 	private Texture berekTexture;
 	private Texture noBerekTexture;
@@ -28,12 +33,17 @@ public class Player extends Rectangle{
 	float yTorque=0;
 	
 	private Sound soundCollision;
+
+	private Skin nameSkin;
 	
-	public Player(boolean isBerek){
+	public Player(boolean isBerek, Skin nameSkin){
 		
 		this.isBerek = isBerek;
 		
+		this.nameSkin = nameSkin;
+		
 		berekTexture = new Texture("berek_circle.png");
+		
 		noBerekTexture = new Texture("no_berek_circle.png");
 		
 		soundCollision = Gdx.audio.newSound(Gdx.files.internal("music/soundCollision.mp3"));
@@ -43,6 +53,7 @@ public class Player extends Rectangle{
 
 
 	public Texture getTexture() {		
+		
 		if(isBerek)
 			return berekTexture;
 		else 
@@ -95,5 +106,21 @@ public class Player extends Rectangle{
 	 	    	y += yTorque;
 
 		}
+	}
+	
+	public void initPlayerNick() {
+		
+		playerNickLabel = new Label(nick, nameSkin);
+		
+		playerNickLabel.setPosition(getX() - playerNickLabel.getWidth() , getY() - 20 );
+		
+		playerNickLabel.setFontScale(2f);
+		
+	}
+	
+	public void calculateNamePosition() {
+		
+		playerNickLabel.setPosition(getX() + width/2 - playerNickLabel.getPrefWidth()/2, getY() - 40 );
+		
 	}
 }   

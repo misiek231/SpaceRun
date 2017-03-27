@@ -25,11 +25,11 @@ public abstract class AbstractScreen implements Screen {
 	Texture background;
 	
 	public AbstractScreen(Berek game){
+		
 		this.game=game;
 		
 		init();
 		
-		game.stage = stage;
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public abstract class AbstractScreen implements Screen {
 		
 		try{
 			
-			WarpClient.getInstance().getLiveRoomInfo(game.roomId);
+			WarpClient.getInstance().getLiveRoomInfo(game.connectionController.roomId);
 			
 		}catch (Exception e) {
 			// TODO: handle exception

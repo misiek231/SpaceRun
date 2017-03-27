@@ -23,14 +23,32 @@ public class ZoneListener implements ZoneRequestListener {
 	public void onCreateRoomDone(RoomEvent arg0) {
         
         game.roomId = arg0.getData().getId();
-		
+		        
+        try {
+        	
+			WarpClient.getInstance().sendPrivateChat( game.player2.nick, "gra," + game.roomId);
+			
+		} catch (Exception e1) {
+			
+			e1.printStackTrace();
+		}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         if(game.wyzwanie){
         
         	try {
 			
         		WarpClient.getInstance().joinRoom(game.roomId);
 			
-        		game.server = true;
+        		game.host = true;
 			
         		WarpClient.getInstance().sendPrivateChat(game.searchedUserName, "wyzwanie," + game.roomId);
 			

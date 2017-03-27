@@ -45,7 +45,7 @@ public class TimeBoost extends RandomObject {
 	@Override
 	public void addEffectsToPlayers(Player playerTouchet, Player playerNotTouchet) 
 	{
-		game.startTime -= 10000;
+		//game.startTime -= 10000;
 	}
 
 }

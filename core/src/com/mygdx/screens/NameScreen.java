@@ -7,27 +7,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Berek;
+import com.mygdx.gui.NameScreenGuiController;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
+import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
 
 public class NameScreen extends AbstractScreen {
 
-	TextField name;
+	NameScreenGuiController guiController;
 	
-	TextButton setName;
-	
-	Label usedName;
-	
-	private Label lConnecting;
-	
-	boolean connecting = false;
-	
-	int i = 0;
-
-	public NameScreen(Berek game) {
-		
+	public NameScreen(Berek game) {		
 		super(game);
 		
-		initControls();		
+		guiController = new NameScreenGuiController(game);
+		
+		guiController.initControls();		
+		
+		guiController.addToStage(stage);
 	}
 
 	@Override
@@ -39,7 +34,7 @@ public class NameScreen extends AbstractScreen {
 	@Override
 	public void render(float delta) {
 		
-		connecting();
+		guiController.connecting();
 		
 		connectingResult();
 		
@@ -54,133 +49,24 @@ public class NameScreen extends AbstractScreen {
 
 	private void connectingResult() {
 		
-		if(game.connected){
-			game.setScreen(new MenuScreen(game));
-			Gdx.input.setOnscreenKeyboardVisible(false);
-			stage.unfocusAll();
-		}
-					
-		if(game.connectErr){
-			
-			usedName.setVisible(true);
-			
-			connecting = false;
-
-		}		
-	}
-
-	private void connecting() {
-
-	
 		
-		if(connecting){
-			
-			lConnecting.setVisible(true);
-			
-			if(i>0)
-				lConnecting.setText("Laczenie");
-			
-			if(i>50)
-				lConnecting.setText("Laczenie.");
-			
-			if(i>100)
-				lConnecting.setText("Laczenie..");
-			
-			if(i>150)
-				lConnecting.setText("Laczenie...");
-			
-			if(i>200) i = 0;
-			
-			lConnecting.setPosition(Berek.GAME_WIDTH/2 - lConnecting.getPrefWidth()/2, 200);
-			
-			i++;			
-	
-		}else{
-			
-			lConnecting.setVisible(false);
-		}		
-	}
-
-	private void initControls() {
+		if(game.connectionController.connectionResult != 0){
 		
-		initName();
-		
-		initUsedName();
-		
-		initSetName();
-		
-		initLconnecting();
-
-		
-		stage.addActor(name);
-		stage.addActor(usedName);
-		stage.addActor(setName);
-		stage.addActor(lConnecting);  
-	}
-	
-	private void initLconnecting() {
-		lConnecting = new Label("",game.skin,"big");
-		
-	}
-
-	private void initSetName() {
-		
-		setName = new TextButton("Zatwierdz", game.skin);
-		
-		setName.setPosition(Berek.GAME_WIDTH/2 - setName.getWidth()/2, name.getY()  - 200);
-		
-		setName.addListener(new ClickListener(){
-			
-			@Override
-			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+			if(game.connectionController.connectionResult == WarpResponseResultCode.SUCCESS){
 				
-				game.Name  = name.getText();
+				game.setScreen(new MenuScreen(game));
 				
 				Gdx.input.setOnscreenKeyboardVisible(false);
 				
-				stage.unfocus(name);
+				stage.unfocusAll();
 				
-				if(!connecting){
+			}else{
 				
-					connecting = true;
+				guiController.errorType.setVisible(true);
 				
-					try {
-					
-						WarpClient.getInstance().connectWithUserName(name.getText());
-					//game.setScreen(new GameScreen(game));
-					} catch (Exception e) {
-
-						System.out.println("B£AD £ACZENIA");
-						
-						usedName.setVisible(true);
-					}
-				}
+				guiController.connecting = false;
 				
-				super.clicked(event, x, y);
-			};			
-		});
-		
-	}
-
-	private void initUsedName() {
-		
-		usedName = new Label("Nazwa zajeta", game.skin);
-		
-		usedName.setPosition(Berek.GAME_WIDTH/2 - usedName.getWidth()/2, name.getY() - 30);
-		
-		usedName.setColor(Color.RED);
-		
-		usedName.setVisible(false);
-		
-	}
-
-	private void initName() {
-		
-		name = new TextField("", game.skin);	
-		
-		name.setSize(300, 50);
-		
-		name.setPosition(Berek.GAME_WIDTH/2 - name.getWidth()/2, Berek.GAME_HEIGHT - 100);				
-		
+			}		
+		}						
 	}
 }

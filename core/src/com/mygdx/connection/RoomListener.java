@@ -26,7 +26,7 @@ public class RoomListener implements RoomRequestListener {
 		
 			if(arg0.getJoinedUsers().length==1){
 				
-				berek.server = true;
+				berek.host = true;
 				berek.start = false;
 			}
 		
@@ -71,6 +71,8 @@ public class RoomListener implements RoomRequestListener {
 				WarpClient.getInstance().subscribeRoom(roomId);
 				
 				WarpClient.getInstance().getLiveRoomInfo(roomId);
+				
+				sendConfirmation();
 			
 			} catch (Exception e) {
 
@@ -83,40 +85,14 @@ public class RoomListener implements RoomRequestListener {
 		      
 		}else {
 		    		    	
-		    if(event.getResult()==WarpResponseResultCode.RESOURCE_NOT_FOUND){
-		        
-		    	HashMap<String, Object> data = new HashMap<String, Object>();
-		    		
-		    	data.put("result", "");  
-		       
-		    	try {
-					
-		    		WarpClient.getInstance().createRoom("Berek", "Berek", 2, data);
-					
-					WarpClient.getInstance().joinRoomInRange(0, 2, false);
-				
-		    	} catch (Exception e) {
-					
-					e.printStackTrace();
-				}  
-		    	
-		    	berek.server = true;
-		    		
-		    }else{  
-		        
-		    	try {
-		    		
-					WarpClient.getInstance().disconnect();
-					berek.BreakGame();
-					berek.init();
-					
-				} catch (Exception e) {
-					
-					e.printStackTrace();
-				}  
-		        System.out.println("B£AD " + event.getResult());	        		        
-		    }  
+		   
 		}
+	}
+
+	private void sendConfirmation() {
+		
+		WarpClient.getInstance().sendPrivateChat(berek.player1.nick, arg1);
+		
 	}
 
 	@Override

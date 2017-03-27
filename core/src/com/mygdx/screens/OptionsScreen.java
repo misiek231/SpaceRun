@@ -57,7 +57,7 @@ public class OptionsScreen extends AbstractScreen {
 			
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.BreakGame();
+			//	game.BreakGame();
 				game.dispose();
 				game.setScreen(new NameScreen(game));
 				super.clicked(event, x, y);

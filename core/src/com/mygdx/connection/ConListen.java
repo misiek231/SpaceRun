@@ -1,6 +1,8 @@
 package com.mygdx.connection;
 
+import com.badlogic.gdx.Gdx;
 import com.mygdx.game.Berek;
+import com.mygdx.screens.MenuScreen;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
 import com.shephertz.app42.gaming.multiplayer.client.events.ConnectEvent;
@@ -17,14 +19,13 @@ public class ConListen implements ConnectionRequestListener{
 
 	@Override      
     public void onConnectDone(ConnectEvent event) {          
-    	
+    			
+		game.connectionController.connectionResult = event.getResult();
+		
 		if(event.getResult() == WarpResponseResultCode.SUCCESS){                          
     	
 			System.out.println("yipee I have connected");    
-    		
-			game.connected = true;
-			game.connectErr = false;
-			
+
 			try {
 				
 				WarpClient.getInstance().initUDP();
@@ -32,16 +33,8 @@ public class ConListen implements ConnectionRequestListener{
 			} catch (Exception e) {
 		
 				e.printStackTrace();
-			} 
-			
-    	}else{  
-    		
-          System.out.println("B£AD £ACZENIA " + event.getResult());
-          
-          game.connectErr = true;
-          game.connected = false;
-          
-        }       
+			} 			
+    	}
 	}      
    
     @Override      

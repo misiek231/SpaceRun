@@ -51,54 +51,7 @@ public class NotificationListener implements NotifyListener {
 	@Override
 	public void onMoveCompleted(MoveEvent arg0) {
 		
-		//System.out.println("onMoveCompleted " + arg0.getMoveData());
 		
-		if(!game.server){
-			
-			try {  
-				JSONObject data = new JSONObject(new String( arg0.getMoveData() ) );  
-				float x1 = (float)data.getDouble("x1");  
-				float y1 = (float)data.getDouble("y1");  
-		    
-				float x2 = (float)data.getDouble("x2");  
-				float y2 = (float)data.getDouble("y2");  
-		    
-				//System.out.println(x1);
-				//System.out.println(y1);
-				//System.out.println(x2);
-				//System.out.println(y2);
-		    
-				game.x1 = x1;
-				game.y1 = y1;
-		    
-				game.x2 = x2;
-				game.y2 = y2;
-		    
-		
-			} catch (Exception e) {  
-				System.out.println("B³AD@@@@@@@@ ODCZYTU@@@@@@@@CLIENT");
-			}  
-		}
-		else{
-			
-			try {  
-				
-				JSONObject data = new JSONObject(new String( arg0.getMoveData() ) );  
-				
-				float knobX = (float)data.getDouble("knobX");  
-				float knobY = (float)data.getDouble("knobY");  
-		    
-				System.out.println(knobX);
-				System.out.println(knobY);
-			
-				game.Knobx2 = knobX;
-				game.Knoby2 = knobY;
-		    
-		
-			} catch (Exception e) {  
-				System.out.println("B³AD@@@@@@@@ ODCZYTU@@@@@@@@SERVER");
-			}  			
-		}
 	}
 
 	@Override
@@ -110,55 +63,6 @@ public class NotificationListener implements NotifyListener {
 	@Override
 	public void onPrivateChatReceived(String arg0, final String arg1) {
 		
-		System.out.println("onPrivateChatReceived " + arg1);
-	
-		ok = new TextButton("Zagraj",game.msgskin);
-		
-		ok.scaleBy(3);
-		
-		ok.addListener(new ClickListener(){
-			
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				zagraj(arg1);
-				super.clicked(event, x, y);
-			}
-		});
-		
-		no = new TextButton("Anuluj",game.msgskin);
-		
-		no.scaleBy(3);
-		
-		no.addListener(new ClickListener(){
-			
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				System.out.println("Zagraj");
-				super.clicked(event, x, y);
-			}
-		});
-		
-		Dialog msgbox = new Dialog("Zaproszenie", game.msgskin);
-		
-		msgbox.text(new Label("Gracz " + arg0 + " zaprosi³ ciê do gry. Czy chcesz z nim zagraæ? ", game.msgskin));
-		
-		msgbox.scaleBy(0.5f);
-
-		msgbox.button(ok);
-		
-		msgbox.button(no);
-		
-		msgbox.show(game.stage);
-		
-		if(arg1.equals("wyzwanie")){
-			
-
-
-		}
-	
-	}
-	
-	private void zagraj(String arg1) {		
 		
 		String[] data = arg1.split(",");
 		
@@ -166,14 +70,16 @@ public class NotificationListener implements NotifyListener {
 		
 		game.roomId = data[1];
 		
+		game.player1.nick = arg0;
+		
 		try {
 			
 			WarpClient.getInstance().joinRoom(game.roomId);
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
-		}
+		}	
 	}
 
 	@Override
@@ -181,7 +87,7 @@ public class NotificationListener implements NotifyListener {
 		
 		System.out.println("onPrivateUpdateReceived " + arg1.toString());
 		
-		if(!game.server){
+		if(!game.host){
 			
 			try { 
 				
@@ -245,7 +151,7 @@ public class NotificationListener implements NotifyListener {
 		
 		System.out.println("onUpdatePeersReceived");
 		
-		if(!game.server){
+		if(!game.host){
 			
 	/*		try {  
 			

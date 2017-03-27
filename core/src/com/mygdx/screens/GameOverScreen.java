@@ -26,11 +26,11 @@ public class GameOverScreen extends AbstractScreen {
 		
 		lGameResult = new Label("", game.skin,"big");
 		
-		System.out.println("Game over Player1: " + game.player1.win);
+/*		System.out.println("Game over Player1: " + game.player1.win);
 		
-		System.out.println("Game over Player2: " + game.player2.win);
+		System.out.println("Game over Player2: " + game.player2.win);*/
 		
-		if(game.server){
+		/*if(game.host){
 			
 			System.out.println("game server true");
 			
@@ -50,7 +50,7 @@ public class GameOverScreen extends AbstractScreen {
 				
 				lGameResult.setText("Niestety Przegrales");
 			}			
-		}
+		}*/
 
 		lGameResult.setPosition(Berek.GAME_WIDTH/2 - lGameResult.getPrefWidth()/2,Berek.GAME_HEIGHT - 200);
 		
