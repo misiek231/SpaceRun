@@ -1,19 +1,11 @@
 package com.mygdx.connection;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Berek;
-import com.mygdx.random.objects.RandomObject;
-import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import com.shephertz.app42.gaming.multiplayer.client.events.ChatEvent;
 import com.shephertz.app42.gaming.multiplayer.client.events.LobbyData;
 import com.shephertz.app42.gaming.multiplayer.client.events.MoveEvent;
@@ -24,8 +16,7 @@ import com.shephertz.app42.gaming.multiplayer.client.listener.NotifyListener;
 public class NotificationListener implements NotifyListener {
 
 	Berek game;
-	TextButton ok;
-	TextButton no;
+
 	
 	public NotificationListener(Berek game) {
 		this.game = game;
@@ -62,24 +53,7 @@ public class NotificationListener implements NotifyListener {
 
 	@Override
 	public void onPrivateChatReceived(String arg0, final String arg1) {
-		
-		
-		String[] data = arg1.split(",");
-		
-		System.out.println(data[0] + " " + data[1]);
-		
-		game.roomId = data[1];
-		
-		game.player1.nick = arg0;
-		
-		try {
-			
-			WarpClient.getInstance().joinRoom(game.roomId);
-			
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-		}	
+
 	}
 
 	@Override
@@ -87,51 +61,7 @@ public class NotificationListener implements NotifyListener {
 		
 		System.out.println("onPrivateUpdateReceived " + arg1.toString());
 		
-		if(!game.host){
-			
-			try { 
-				
-				JSONObject data = new JSONObject(new String( arg1 ) );  
-				float x1 = (float)data.getDouble("x1");  
-				float y1 = (float)data.getDouble("y1");  
-		    
-				float x2 = (float)data.getDouble("x2");  
-				float y2 = (float)data.getDouble("y2");  
-		    
-				System.out.println(x1);
-				System.out.println(y1);
-				System.out.println(x2);
-				System.out.println(y2);
-		    
-				game.x1 = x1;
-				game.y1 = y1;
-		    
-				game.x2 = x2;
-				game.y2 = y2;
-	
-			} catch (Exception e) {  
-				System.out.println("B³AD@@@@@@@@ ODCZYTU@@@@@@@@CLIENT");
-			}  
-		}
-		else{
-			
-			try {  
-				
-				JSONObject data = new JSONObject(new String( arg1 ) );  
-				
-				float knobX = (float)data.getDouble("knobX");  
-				float knobY = (float)data.getDouble("knobY");  
-		    
-				System.out.println(knobX);
-				System.out.println(knobY);
-			
-				game.Knobx2 = knobX;
-				game.Knoby2 = knobY;
-		    		
-			} catch (Exception e) {  
-				System.out.println("B³AD@@@@@@@@ ODCZYTU@@@@@@@@SERVER");
-			} 			
-		}
+		
 	}
 
 	@Override
@@ -145,84 +75,35 @@ public class NotificationListener implements NotifyListener {
 
 	}
 
-	@SuppressWarnings("unchecked")
+
 	@Override
 	public void onUpdatePeersReceived(UpdateEvent arg0) {
 		
 		System.out.println("onUpdatePeersReceived");
-		
-		if(!game.host){
-			
-	/*		try {  
-			
-			JSONObject data = new JSONObject(new String( arg0.getUpdate() ) ); 
-			
-			//game.randomObjectsControler.AddObject( (float)data.getDouble("objx") , (float)data.getDouble("objy") , (int)data.getInt("objtyp")); 
-			
-			System.out.println("odbiur");
-			
-			System.out.println((float)data.getDouble("objx"));
-			
-			System.out.println((float)data.getDouble("objy") );
-			
-			System.out.println((int)data.getInt("objtyp"));
-			
-			}catch (Exception e) {
-				System.out.println("błąd odbioru");
-			}*/
-			
-	            try {  
-	                JSONObject data = new JSONObject(new String( arg0.getUpdate() ) );  
-	                float x1 = (float)data.getDouble("x1");  
-	                float y1 = (float)data.getDouble("y1");  
-	           
-	                float x2 = (float)data.getDouble("x2");  
-	                float y2 = (float)data.getDouble("y2");
-	               
-	                boolean b1 = (boolean)data.getBoolean("b1");
-	           
-	            //  System.out.println(x1);
-	            //  System.out.println(y1);
-	            //  System.out.println(x2);
-	            //   System.out.println(y2);
-	            
-	                game.x1 = x1;
-	                game.y1 = y1;
-	           
-	                game.x2 = x2;
-	                game.y2 = y2;
-	               
-	                game.player1.isBerek = b1;
-	                game.player2.isBerek = !game.player1.isBerek;
-	                
-	                game.curentRoundTime = (String)data.get("time");
-	           
-	       
-	            } catch (Exception e) {  
-	                //System.out.println("BłAD@@@@@@@@ ODCZYTU@@@@@@@@CLIENT");
-	            }  
-	        }
-	        else{
-	           
-	            try {  
-	               
-	                JSONObject data = new JSONObject(new String( arg0.getUpdate() ) );  
-	               
-	                float knobX = (float)data.getDouble("knobX");  
-	                float knobY = (float)data.getDouble("knobY");  
-	           
-	                //System.out.println(knobX);
-	                //System.out.println(knobY);
-	           
-	                game.Knobx2 = knobX;
-	                game.Knoby2 = knobY;
-	           
-	       
-	            } catch (Exception e) {  
-	                //System.out.println("BłAD@@@@@@@@ ODCZYTU@@@@@@@@SERVER");
-	            }
-	        }
 
+		try {
+			
+			JSONObject data = new JSONObject(new String( arg0.getUpdate() ) );
+			
+			if(data.getBoolean("toHost")){
+
+				game.connectionController.hostController.setPlayersData(data.getString("nickName"), (float)data.getDouble("knobX"), (float)data.getDouble("knobY"));
+
+			}else{
+
+				game.gameScreen.gamePlayObjects.player1.setPosition( (float)data.getDouble( game.connectionController.nickName + "x" ), (float)data.getDouble( game.connectionController.nickName + "y" ));
+
+				game.gameScreen.gamePlayObjects.player2.setPosition( (float)data.getDouble( game.gameScreen.gamePlayObjects.player2.nick + "x" ), (float)data.getDouble( game.gameScreen.gamePlayObjects.player2.nick + "y" ));
+					
+				game.gameScreen.gamePlayObjects.player1.isBerek = (boolean)data.getBoolean(game.connectionController.nickName + "b");
+					
+				game.gameScreen.gamePlayObjects.player2.isBerek = !game.gameScreen.gamePlayObjects.player2.isBerek;						           
+			}
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 
 	@Override

@@ -1,7 +1,5 @@
 package com.mygdx.players;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -14,27 +12,39 @@ public class Player extends Rectangle{
 	public boolean isBerek;
 	
 	private static final float recoilSpeed = 1.1f;
+	
 	private static final float recoilPower = 3;
+	
 	public float playerSpeed = 7;
+	
 	public boolean checkReflection = true;
 
 	public Label playerNickLabel;
-
-	
 	
 	private Texture berekTexture;
+	
 	private Texture noBerekTexture;
 	
 	public String nick;
 	
 	public boolean win = false;
 	
-	float xTorque=0;
-	float yTorque=0;
+	public float xTorque=0;
 	
-	private Sound soundCollision;
+	public float yTorque=0;
 
 	private Skin nameSkin;
+	
+	public float knobX;
+	
+	public float knobY;
+	
+	
+	public Player(boolean isBerek) {
+		
+		this.isBerek = isBerek;
+		
+	}
 	
 	public Player(boolean isBerek, Skin nameSkin){
 		
@@ -45,12 +55,9 @@ public class Player extends Rectangle{
 		berekTexture = new Texture("berek_circle.png");
 		
 		noBerekTexture = new Texture("no_berek_circle.png");
-		
-		soundCollision = Gdx.audio.newSound(Gdx.files.internal("music/soundCollision.mp3"));
-		
+
 		setSize(50, 50);
 	}
-
 
 	public Texture getTexture() {		
 		
@@ -66,26 +73,22 @@ public class Player extends Rectangle{
 			
 			if(x < 0){
 				
-				xTorque = 50/recoilPower;	
-				soundCollision.play();
+				xTorque = 50/recoilPower;					
 			}
 			
 			if(x > Berek.GAME_WIDTH - 50){
 				
-				xTorque = -50/recoilPower;	
-				soundCollision.play();
+				xTorque = -50/recoilPower;					
 			}
 			
 			if(y < 0){
 				
-				yTorque = 50/recoilPower;	
-				soundCollision.play();
+				yTorque = 50/recoilPower;					
 			}
 			
 			if(y > Berek.GAME_HEIGHT - 50){
 				
 				yTorque = -50/recoilPower;	
-				soundCollision.play();
 			}
 			
 			
@@ -99,11 +102,9 @@ public class Player extends Rectangle{
 	 	    	yTorque = yTorque/recoilSpeed;	    
 	 	    else
 	 	    	yTorque=0;
-	    	
-	 	
-	 	    
-	 	    	x += xTorque;
-	 	    	y += yTorque;
+
+	 	    x += xTorque;
+	 	    y += yTorque;
 
 		}
 	}

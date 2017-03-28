@@ -16,6 +16,8 @@ public class MenuScreen extends AbstractScreen {
 	@Override
 	public void show() {
 		
+		System.out.println("jestem");
+		
 		guiController = new MenuGuiController(game);
 		
 		guiController.init();

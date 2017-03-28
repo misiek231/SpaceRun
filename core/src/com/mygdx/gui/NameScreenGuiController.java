@@ -69,20 +69,22 @@ public class NameScreenGuiController {
 			
 			@Override
 			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-				
-				
-				
+
 				Gdx.input.setOnscreenKeyboardVisible(false);
-				
-				
-				
+			
 				if(!connecting){
 				
 					connecting = true;
+					
+					
 				
 					try {
 					
+						
+						game.connectionController.nickName = name.getText();
+						
 						WarpClient.getInstance().connectWithUserName(name.getText());
+						
 					//game.setScreen(new GameScreen(game));
 					} catch (Exception e) {
 

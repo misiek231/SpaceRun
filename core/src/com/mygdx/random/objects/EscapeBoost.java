@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.Berek;
 import com.mygdx.players.Player;
 
+@SuppressWarnings("serial")
 public class EscapeBoost extends RandomObject {
 	
 	private final float workTime = 10f;

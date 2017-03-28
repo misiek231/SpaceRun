@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.Berek;
 import com.mygdx.players.Player;
 
+@SuppressWarnings("serial")
 public class SlowPlayerObject extends RandomObject {
 	
 	private final float addSlow = -3f;

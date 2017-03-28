@@ -122,6 +122,7 @@ public class MenuGuiController {
 	private void initBtPlay() {
 		
 		btPlay = new TextButton("Graj",game.skin);
+		
 		btPlay.setPosition(Berek.GAME_WIDTH/2 - btPlay.getWidth()/2, 1000);
 		
 		btPlay.addListener(new ClickListener(){

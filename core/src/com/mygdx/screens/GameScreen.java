@@ -8,7 +8,7 @@ public class GameScreen extends AbstractScreen{
 	
 	Label lRoundTime;
 
-	GamePlayObjects gamePlayObjects;
+	public GamePlayObjects gamePlayObjects;
 	
 	public GameScreen(final Berek game) {
 		
@@ -45,6 +45,8 @@ public class GameScreen extends AbstractScreen{
 		drawBath();
 		
 		drawStage();
+		
+		game.connectionController.sendDataToHost(gamePlayObjects.touchpad.getKnobPercentX(), gamePlayObjects.touchpad.getKnobPercentY());
 	    	
 	}
 
