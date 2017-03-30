@@ -1,5 +1,7 @@
 package com.mygdx.connection;
 
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.game.Berek;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
@@ -7,14 +9,14 @@ import com.shephertz.app42.gaming.multiplayer.client.events.LiveRoomInfoEvent;
 import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent;
 import com.shephertz.app42.gaming.multiplayer.client.listener.RoomRequestListener;
 
+
 public class RoomListener implements RoomRequestListener {
 
-	Berek berek;
-	private String roomId;
+	Berek game;
 
-	public RoomListener( Berek berek) {
+	public RoomListener( Berek game) {
 		
-		this.berek = berek;
+		this.game = game;
 	}
 
 	@Override
@@ -24,29 +26,51 @@ public class RoomListener implements RoomRequestListener {
 
 	@Override
 	public void onJoinAndSubscribeRoomDone(RoomEvent arg0) {
-		// TODO Auto-generated method stub
+
+		System.out.println("onJoinAndSubscribeRoomDone");
 		
+		if(arg0.getResult()==WarpResponseResultCode.SUCCESS){ 
+			
+			if(game.connectionController.host){
+	
+				try {
+					
+					WarpClient.getInstance().sendPrivateChat(game.gameScreen.gamePlayObjects.player2.nick, "game," + arg0.getData().getId());
+					
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+				}		
+			}else{
+				
+				try {
+					
+					WarpClient.getInstance().sendPrivateChat(game.gameScreen.gamePlayObjects.player2.nick, "gameOk");
+					
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+				}	
+				
+				Timer.schedule(new Task() {
+					
+					@Override
+					public void run() {
+						game.setScreen(game.gameScreen);
+						
+					}
+	
+				}, 1);
+			}
+			
+		}else {
+  
+		}		
 	}
 
 	@Override
 	public void onJoinRoomDone(RoomEvent event) {
 		
-		if(event.getResult()==WarpResponseResultCode.SUCCESS){ 
-			 
-			this.roomId = event.getData().getId();  
-		          
-			try {
-				
-				WarpClient.getInstance().subscribeRoom(roomId);
-
-			} catch (Exception e) {
-
-				e.printStackTrace();
-			} 
-		      
-		}else {
-  
-		}
 	}
 
 	@Override

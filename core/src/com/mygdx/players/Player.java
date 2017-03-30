@@ -44,6 +44,8 @@ public class Player extends Rectangle{
 		
 		this.isBerek = isBerek;
 		
+		setSize(50, 50);
+		
 	}
 	
 	public Player(boolean isBerek, Skin nameSkin){

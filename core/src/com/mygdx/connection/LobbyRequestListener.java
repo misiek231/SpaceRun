@@ -19,13 +19,16 @@ public class LobbyRequestListener implements com.shephertz.app42.gaming.multipla
 	@Override
 	public void onGetLiveLobbyInfoDone(LiveRoomInfoEvent arg0) {
 				
-		if( arg0.getJoinedUsers().length != 0 ){
+
+		if( arg0.getJoinedUsers().length > 1 ){
 						
-			//game.player2.nick = arg0.getJoinedUsers()[0];
+			game.gameScreen.gamePlayObjects.player2.nick = arg0.getJoinedUsers()[0];
+			
+			game.connectionController.host = true;
 			
 			createRoom();
 			        
-			//game.host = true;
+			
 		
 		}
 	}
@@ -39,8 +42,6 @@ public class LobbyRequestListener implements com.shephertz.app42.gaming.multipla
     	try {
 			
     		WarpClient.getInstance().createRoom("Berek", "Berek", 2, data);
-			
-			WarpClient.getInstance().joinRoomInRange(0, 2, false);
 		
     	} catch (Exception e) {
 			
@@ -52,8 +53,8 @@ public class LobbyRequestListener implements com.shephertz.app42.gaming.multipla
 
 	@Override
 	public void onJoinLobbyDone(LobbyEvent arg0) {
-		// TODO Auto-generated method stub
-
+		
+		System.out.println("onJoinLobbyDone");
 	}
 
 	@Override

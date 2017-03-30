@@ -48,7 +48,7 @@ public class WarpController {
 		WarpClient.getInstance().addNotificationListener(new NotificationListener(game));
 		
 		WarpClient.getInstance().addLobbyRequestListener(new LobbyRequestListener(game));
-		
+
 	}
 	
 	public void dispose() throws Exception{  

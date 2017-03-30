@@ -3,6 +3,7 @@ package com.mygdx.connection;
 import org.json.JSONObject;
 
 import com.mygdx.game.Berek;
+import com.mygdx.hosting.GameState;
 import com.mygdx.hosting.Hosting;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 
@@ -28,6 +29,8 @@ public class ConnectionController {
 		warpController = new WarpController(game, this);	
 		
 		hostController = new Hosting();
+		
+		hostController.gameState = GameState.NotStarted;
 	}
 	
 	public void sendDataToHost(float knobX, float knobY){
@@ -46,16 +49,10 @@ public class ConnectionController {
 			
 			//data.put("objects", game.randomObjectsControler.randomObjects);
 			
-			System.out.println("client wysy³a");
-			
 			WarpClient.getInstance().sendUDPUpdatePeers(data.toString().getBytes());			
-			
-			
+						
 		} catch (Exception e) {  
 			System.out.println("B£AD@@@@@@@@ WYSY£U");
-		}  
-		
-		
-	}
-	
+		}  		
+	}	
 }

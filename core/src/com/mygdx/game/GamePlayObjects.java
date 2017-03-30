@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.controler.AnalogStick;
 import com.mygdx.players.Player;
 
@@ -10,6 +11,8 @@ public class GamePlayObjects {
 	public Player player2;
 	
 	public AnalogStick touchpad;
+	
+	public Label lRoundTime;
 	
 	Berek game;
 	
@@ -31,6 +34,15 @@ public class GamePlayObjects {
 		player2.initPlayerNick();
 		
 		touchpad = new AnalogStick();
+
+		initLRoundTime();
 		
+	}
+	
+	private void initLRoundTime() {
+		
+		lRoundTime = new Label("",game.skin,"big");
+		
+		lRoundTime.setPosition(Berek.GAME_WIDTH/2 - lRoundTime.getPrefWidth()/2, Berek.GAME_HEIGHT - 100);		
 	}
 }

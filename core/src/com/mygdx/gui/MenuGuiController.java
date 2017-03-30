@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Berek;
 import com.mygdx.screens.CustumGameScreen;
+import com.mygdx.screens.GameScreen;
 import com.mygdx.screens.MenuScreen;
 import com.mygdx.screens.OptionsScreen;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
@@ -134,12 +135,16 @@ public class MenuGuiController {
 					
 					try {
 				
+						game.gameScreen = new GameScreen(game);
+						
+						game.gameScreen.gamePlayObjects.player1.nick = game.connectionController.nickName;
+						
 						WarpClient.getInstance().joinLobby();
 						
 						WarpClient.getInstance().subscribeLobby();
 						
 						WarpClient.getInstance().getLiveLobbyInfo();
-											
+	
 					} catch (Exception e) {
 
 						System.out.println("B£AD £ACZENIA");

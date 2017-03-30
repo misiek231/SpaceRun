@@ -70,7 +70,7 @@ public abstract class AbstractScreen implements Screen {
 		
 		stage = new Stage(new StretchViewport(Berek.GAME_WIDTH, Berek.GAME_HEIGHT, camera));
 		
-		background = new Texture("background7.jpg");
+		background = new Texture("background7.png");
         
 		Gdx.input.setInputProcessor(stage);
 	}

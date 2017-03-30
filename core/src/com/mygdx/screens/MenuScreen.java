@@ -2,7 +2,6 @@ package com.mygdx.screens;
 
 import com.mygdx.game.Berek;
 import com.mygdx.gui.MenuGuiController;
-import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 
 public class MenuScreen extends AbstractScreen {
 
@@ -32,12 +31,7 @@ public class MenuScreen extends AbstractScreen {
 	public void render(float delta) {
 		
 		guiController.searching();
-		
-		refreschRooms();
-		
-		checkStart();
-		
-		
+
 		clearScreen();
 			
 		drawBackground();
@@ -47,15 +41,6 @@ public class MenuScreen extends AbstractScreen {
 		//	fps.setText( Integer.toString( Gdx.graphics.getFramesPerSecond() ) );
 	}
 		
-	private void checkStart() {
-		
-		try {
-			
-			WarpClient.getInstance().getLiveLobbyInfo();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}		
-	}			
 }
 	
 

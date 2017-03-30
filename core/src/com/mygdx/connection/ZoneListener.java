@@ -1,6 +1,7 @@
 package com.mygdx.connection;
 
 import com.mygdx.game.Berek;
+import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import com.shephertz.app42.gaming.multiplayer.client.events.AllRoomsEvent;
 import com.shephertz.app42.gaming.multiplayer.client.events.AllUsersEvent;
 import com.shephertz.app42.gaming.multiplayer.client.events.LiveUserInfoEvent;
@@ -18,7 +19,17 @@ public class ZoneListener implements ZoneRequestListener {
 
 	@Override
 	public void onCreateRoomDone(RoomEvent arg0) {
-  
+		
+		try {
+			
+			
+			System.out.println("onCreateRoomDone");
+			WarpClient.getInstance().joinAndSubscribeRoom( arg0.getData().getId() );
+			
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}  
 	}
 
 	@Override

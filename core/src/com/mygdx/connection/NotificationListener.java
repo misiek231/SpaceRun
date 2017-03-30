@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.mygdx.game.Berek;
+import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import com.shephertz.app42.gaming.multiplayer.client.events.ChatEvent;
 import com.shephertz.app42.gaming.multiplayer.client.events.LobbyData;
 import com.shephertz.app42.gaming.multiplayer.client.events.MoveEvent;
@@ -53,7 +54,46 @@ public class NotificationListener implements NotifyListener {
 
 	@Override
 	public void onPrivateChatReceived(String arg0, final String arg1) {
+			
+		if(game.connectionController.host){
+			
+			if(game.gameScreen.gamePlayObjects.player2.nick.equals( arg0 ) && arg1.equals( "gameOk" ) ){
+				
+				game.connectionController.hostController.initPlayersNick(game.gameScreen.gamePlayObjects.player1.nick, game.gameScreen.gamePlayObjects.player2.nick);
 
+				game.connectionController.hostController.startGame();
+				
+				try {
+					
+					game.setScreen(game.gameScreen);
+					
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+				}
+			}
+	
+		}else{
+		
+			String[] recivedData = arg1.split(",");			
+			
+			if(recivedData[0].equals("game")){
+				
+				game.connectionController.roomId = recivedData[1];
+				
+				
+				game.gameScreen.gamePlayObjects.player2.nick = arg0;
+				
+				try {
+					
+					WarpClient.getInstance().joinAndSubscribeRoom(recivedData[1]);
+					
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+				}
+			}		
+		}
 	}
 
 	@Override
@@ -79,25 +119,28 @@ public class NotificationListener implements NotifyListener {
 	@Override
 	public void onUpdatePeersReceived(UpdateEvent arg0) {
 		
-		System.out.println("onUpdatePeersReceived");
 
 		try {
 			
 			JSONObject data = new JSONObject(new String( arg0.getUpdate() ) );
 			
 			if(data.getBoolean("toHost")){
+				
+				if(game.connectionController.host){
 
-				game.connectionController.hostController.setPlayersData(data.getString("nickName"), (float)data.getDouble("knobX"), (float)data.getDouble("knobY"));
-
+					game.connectionController.hostController.setPlayersData(data.getString("nickName"), (float)data.getDouble("knobX"), (float)data.getDouble("knobY"));
+				}
 			}else{
 
 				game.gameScreen.gamePlayObjects.player1.setPosition( (float)data.getDouble( game.connectionController.nickName + "x" ), (float)data.getDouble( game.connectionController.nickName + "y" ));
 
 				game.gameScreen.gamePlayObjects.player2.setPosition( (float)data.getDouble( game.gameScreen.gamePlayObjects.player2.nick + "x" ), (float)data.getDouble( game.gameScreen.gamePlayObjects.player2.nick + "y" ));
-					
+				
 				game.gameScreen.gamePlayObjects.player1.isBerek = (boolean)data.getBoolean(game.connectionController.nickName + "b");
+				
+				game.gameScreen.gamePlayObjects.lRoundTime.setText( ( String )data.getString( "time" ) );
 					
-				game.gameScreen.gamePlayObjects.player2.isBerek = !game.gameScreen.gamePlayObjects.player2.isBerek;						           
+				game.gameScreen.gamePlayObjects.player2.isBerek = !game.gameScreen.gamePlayObjects.player1.isBerek;						           
 			}
 			
 		} catch (JSONException e) {

@@ -47,8 +47,6 @@ public class NameScreen extends AbstractScreen {
 			
 			if(game.connectionController.connectionResult == WarpResponseResultCode.SUCCESS){
 				
-				
-				
 				game.setScreen(new MenuScreen(game));
 				
 				Gdx.input.setOnscreenKeyboardVisible(false);
