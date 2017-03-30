@@ -125,5 +125,11 @@ public class Player extends Rectangle{
 		
 		playerNickLabel.setPosition(getX() + width/2 - playerNickLabel.getPrefWidth()/2, getY() - 40 );
 		
+		playerNickLabel.setText(nick);
+		
+		System.out.println("playerPosition " + getX() + " " + getY());
+		
+		System.out.println("labelPosition " + playerNickLabel.getX() + " " + playerNickLabel.getY());
+		
 	}
 }   
