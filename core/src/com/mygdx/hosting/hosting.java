@@ -3,9 +3,10 @@ package com.mygdx.hosting;
 import org.json.JSONObject;
 
 import com.mygdx.players.Player;
+import com.mygdx.random.controller.RandomObjectsControlerHost;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 
-public class Hosting {
+public class Hosting{
 
 	private static final float recoilPower = 5;
 	
@@ -19,46 +20,48 @@ public class Hosting {
 	
 	String leftGameTime;
 
-	private long startTime;
+	public long startTime;
 	
 	public int gameState;
+	
+	RandomObjectsControlerHost randomObjectsControler;
 	
 	public Hosting(){
 		
 		player1 = new Player(true);
 		
 		player2 = new Player(false);
+		
+		randomObjectsControler = new RandomObjectsControlerHost(this);
 
-		gameState=GameState.NotStarted;
-		
-		//game.randomObjectsControler = new RandomObjectsControler(game, batch);
-		
+		gameState = GameState.NotStarted;
 	}
 
 	public void hostRefresh() {
 		
 		calculatePosition();
 		
+		refreschRandomObjects();
+
 		GameTime();
 
 		sendData();  	
 	}
 	
+	private void refreschRandomObjects() {
+		
+		randomObjectsControler.refreschObjects();		
+	}
+
 	public void initPlayersNick(String player1Nick, String player2Nick){
 		
 		player1.nick = player1Nick;
 		
 		player2.nick = player2Nick;
 		
-		System.out.println("player1nick " + player1.nick );
-		
-		System.out.println("player2nick " + player2.nick );
-		
 	}
 	
 	public void setPlayersData(String nick, float knobX, float knobY) {
-		
-		//System.out.println(nick + " " + knobX+ " " + knobY);
 		
 		if( player1.nick.equals(nick) ){
 			
@@ -107,9 +110,8 @@ public class Hosting {
 			player2.checkReflection();
 		}		    								
 	}
-	
-	
-private void sendData() {
+		
+	private void sendData() {
 
 		try { 
 		
@@ -130,10 +132,17 @@ private void sendData() {
 			data.put(player2.nick + "b", player2.isBerek); 
 			
 			data.put("time", leftGameTime);
-
-			//data.put("objects", game.randomObjectsControler.randomObjects);
 			
-			WarpClient.getInstance().sendUDPUpdatePeers(data.toString().getBytes());			
+			data.put("isObjects", randomObjectsControler.sendData );
+			
+			if(randomObjectsControler.sendData == true){
+
+				data.put("objects", randomObjectsControler.GetObjectsData() );
+				
+				randomObjectsControler.sendData = false;			
+			}
+			
+			WarpClient.getInstance().sendUDPUpdatePeers( data.toString().getBytes() );			
 
 		} catch (Exception e) {  
 			System.out.println("B£AD@@@@@@@@ WYSY£U");
@@ -142,8 +151,6 @@ private void sendData() {
 
 	private void GameTime() {
 
-		
-		
 		if(gameState == GameState.CountingDown){
 	
 			countingDownTime();				
@@ -162,8 +169,8 @@ private void sendData() {
 		leftGameTime = Integer.toString(3 - elapsedTime);
 		
 		if(elapsedTime >= 3){
-			
-			System.out.println(elapsedTime);
+
+			randomObjectsControler.startRandom();
 			
 			startTime = System.currentTimeMillis();
 			
@@ -195,8 +202,6 @@ private void sendData() {
 		startTime = System.currentTimeMillis();
 		
 		gameState = GameState.CountingDown;
-		
-	}
 
-	
+	}
 }

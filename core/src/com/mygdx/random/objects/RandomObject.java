@@ -1,43 +1,54 @@
 package com.mygdx.random.objects;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.Berek;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
+import com.mygdx.hosting.Hosting;
 import com.mygdx.players.Player;
 
+@SuppressWarnings("serial")
 public abstract class RandomObject extends Rectangle {
 
-	private static final long serialVersionUID = 1L;
-	
-	Berek game;
-	
-	Texture texture;
+	Hosting host;
 	
 	public boolean exist = true;
 	
-	public RandomObject(Berek game) {		
-		
+	protected int liveTime;
+
+	public RandomObject(int liveTime) {				
 		super();
 		
-		this.game = game;
+		this.liveTime = liveTime;
 		
-		setSize(50,50);	
+		setSize(50,50);
+		
 		RandomPosition();
+
+		init();
+	}
+
+	private void init() {
+	
+		Timer.schedule(new Task() {
+			
+			@Override
+			public void run() {
+				
+				exist = false;						
+			}
+		}, liveTime);				
 	}
 
 	public void RandomPosition() {
 
-		y = MathUtils.random(100, 1230);
+		y = MathUtils.random(300, 1230);
 		
-		x = MathUtils.random(100, 670);		
+		x = MathUtils.random(300, 670);		
 	}
 
-	public Texture getTexture() {
+	public abstract void addEffectsToPlayers( Player playerTouchet, Player playerNotTouchet, Hosting host);
 
-		return texture;
-	}
-	
-	public abstract void addEffectsToPlayers( Player playerTouchet, Player playerNotTouchet);	
+	public abstract int getType();
 	
 }

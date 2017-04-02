@@ -1,51 +1,25 @@
 package com.mygdx.random.objects;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
-import com.mygdx.game.Berek;
+import com.mygdx.hosting.Hosting;
 import com.mygdx.players.Player;
+import com.mygdx.random.controller.RandomObjectType;
 
 @SuppressWarnings("serial")
 public class EscapeBoost extends RandomObject {
 	
-	private final float workTime = 10f;
-	private final float liveTime = 10f;
 	
-	public EscapeBoost(Berek game) {
-		super(game);
-		// TODO Auto-generated constructor stub
-		init();
+	private final float workTime = 10f;
+
+	public EscapeBoost() {
 		
+		super(3);
 	}	
 
-	
-
-	public EscapeBoost(Berek game, float x, float y) {
-		super(game);
-		
-		setPosition(x, y);
-
-		init();
-	}
-
-	private void init() {
-		texture = new Texture("randomObjects/EscapeBoost.png");
-				
-				Timer.schedule(new Task() {
-					
-					@Override
-					public void run() {
-						exist = false;
-						
-					}
-				}, liveTime);
-				
-			}
-	
 	@Override
-	public void addEffectsToPlayers(final Player playerTouchet, Player playerNotTouchet) {
-		// TODO Auto-generated method stub
+	public void addEffectsToPlayers(final Player playerTouchet, Player playerNotTouchet, Hosting host) {
+
 		playerTouchet.checkReflection = false;
 		
 		Timer.schedule(new Task() {
@@ -58,4 +32,9 @@ public class EscapeBoost extends RandomObject {
 		}, workTime);
 	}
 
+	@Override
+	public int getType() {
+		
+		return RandomObjectType.EscapeBoost;
+	}
 }

@@ -1,52 +1,28 @@
 package com.mygdx.random.objects;
 
-import com.badlogic.gdx.graphics.Texture;
+import java.io.Serializable;
+
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
-import com.mygdx.game.Berek;
+import com.mygdx.hosting.Hosting;
 import com.mygdx.players.Player;
+import com.mygdx.random.controller.RandomObjectType;
+
 
 @SuppressWarnings("serial")
-public class SlowPlayerObject extends RandomObject {
+public class SlowPlayerObject extends RandomObject implements Serializable{
 	
 	private final float addSlow = -3f;
-	private final float workTime = 10f;
-	private final float liveTime = 10f;
 	
+	private final float workTime = 10f;
+	
+	public SlowPlayerObject() {
 
-	public SlowPlayerObject(Berek game) {
-		super(game);
-		init();
-		
-	}
-
-
-
-	public SlowPlayerObject(Berek game, float x, float y) {
-		super(game);
-		
-		setPosition(x, y);
-		
-		init();
-	}
-
-	private void init() {
-		
-		texture = new Texture("randomObjects/SlowBoost.png");
-		
-		Timer.schedule(new Task() {
-			
-			@Override
-			public void run() {
-				//exist = false;
-				
-			}
-		}, liveTime);
-		
+		super(6);
 	}
 	
 	@Override
-	public void addEffectsToPlayers(Player playerTouchet, final Player playerNotTouchet) {
+	public void addEffectsToPlayers(Player playerTouchet, final Player playerNotTouchet, Hosting host) {
 		// TODO Auto-generated method stub
 		playerNotTouchet.playerSpeed += addSlow;
 		
@@ -59,5 +35,10 @@ public class SlowPlayerObject extends RandomObject {
 			}
 		}, workTime);
 	}
-
+	
+	@Override
+	public int getType() {
+		
+		return RandomObjectType.SlowPlayerObject;
+	}
 }

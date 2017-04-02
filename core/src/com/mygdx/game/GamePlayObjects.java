@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.controler.AnalogStick;
 import com.mygdx.players.Player;
+import com.mygdx.random.controller.RandomObjectsControllerClient;
 
 public class GamePlayObjects {
 	
@@ -11,6 +12,8 @@ public class GamePlayObjects {
 	public Player player2;
 	
 	public AnalogStick touchpad;
+	
+	public RandomObjectsControllerClient randomObjectsController;
 	
 	public Label lRoundTime;
 	
@@ -34,6 +37,8 @@ public class GamePlayObjects {
 		player2.initPlayerNick();
 		
 		touchpad = new AnalogStick();
+
+		randomObjectsController = new RandomObjectsControllerClient();
 
 		initLRoundTime();
 		

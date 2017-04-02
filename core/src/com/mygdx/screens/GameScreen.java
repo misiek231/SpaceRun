@@ -7,6 +7,8 @@ public class GameScreen extends AbstractScreen{
 
 	public GamePlayObjects gamePlayObjects;
 	
+	
+	
 	public GameScreen(final Berek game) {
 		
 		super(game);	
@@ -62,7 +64,7 @@ public class GameScreen extends AbstractScreen{
 	
 		batch.begin();	
 
-		//game.randomObjectsControler.drowObjects();
+		gamePlayObjects.randomObjectsController.drowObjects(batch);
 			
 		batch.draw(gamePlayObjects.player1.getTexture(), gamePlayObjects.player1.getX(), gamePlayObjects.player1.getY(), gamePlayObjects.player1.width, gamePlayObjects.player1.height);
 		 	

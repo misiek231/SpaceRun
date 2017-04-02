@@ -1,11 +1,15 @@
 package com.mygdx.connection;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.mygdx.game.Berek;
+import com.mygdx.random.controller.RandomObjectData;
+import com.mygdx.serialize.ClassSerializer;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import com.shephertz.app42.gaming.multiplayer.client.events.ChatEvent;
 import com.shephertz.app42.gaming.multiplayer.client.events.LobbyData;
@@ -116,6 +120,7 @@ public class NotificationListener implements NotifyListener {
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onUpdatePeersReceived(UpdateEvent arg0) {
 		
@@ -139,14 +144,28 @@ public class NotificationListener implements NotifyListener {
 				game.gameScreen.gamePlayObjects.player1.isBerek = (boolean)data.getBoolean(game.connectionController.nickName + "b");
 				
 				game.gameScreen.gamePlayObjects.lRoundTime.setText( ( String )data.getString( "time" ) );
-					
+				
+				if(data.getBoolean("isObjects")){
+					game.gameScreen.gamePlayObjects.randomObjectsController.updateObjects( (ArrayList<RandomObjectData>) ClassSerializer.fromString( data.getString("objects") ) );
+				
+					System.out.println("Object Recived");
+				}
+				
+				
 				game.gameScreen.gamePlayObjects.player2.isBerek = !game.gameScreen.gamePlayObjects.player1.isBerek;						           
 			}
 			
 		} catch (JSONException e) {
+			
+			e.printStackTrace();
+			
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 	
 	}
 
 	@Override

@@ -1,0 +1,144 @@
+package com.mygdx.random.controller;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
+import com.mygdx.hosting.Hosting;
+import com.mygdx.random.objects.EscapeBoost;
+import com.mygdx.random.objects.RandomObject;
+import com.mygdx.random.objects.SlowPlayerObject;
+import com.mygdx.random.objects.SpeedBoster;
+import com.mygdx.random.objects.TimeBoost;
+import com.mygdx.serialize.ClassSerializer;
+
+public class RandomObjectsControlerHost {
+	
+	public ArrayList<RandomObject> randomObjects;
+	
+	Hosting host;
+	
+	public boolean sendData = false;
+
+	private int removeObjectIndex;
+	
+	public RandomObjectsControlerHost(Hosting host) {
+
+		this.host = host;
+		
+		randomObjects = new ArrayList<RandomObject>();
+	}
+	
+	public void startRandom(){
+		
+		Timer.schedule(new Task(){
+
+			@Override
+			public void run() {
+			
+				if(randomObjects.size() < 10){
+					
+					switch (MathUtils.random(1,4)) {
+					
+						case 1:
+						
+							randomObjects.add(new SpeedBoster()); 
+							
+							System.out.println("object added");
+						
+							break;
+							
+						case 2:
+							
+							randomObjects.add(new SlowPlayerObject());
+							
+							System.out.println("object added");
+						
+							break;
+							
+						case 3:
+							
+							randomObjects.add(new EscapeBoost()); 
+							
+							System.out.println("object added");
+						
+							break;
+							
+						case 4:
+							
+							randomObjects.add(new TimeBoost()); 
+							
+							System.out.println("object added");
+						
+							break;
+						
+						default:
+							break;
+					}	
+					
+					sendData = true;
+				}	
+			}
+		}, 1, 5);			
+	}	
+
+	public String GetObjectsData(){
+		
+		ArrayList<RandomObjectData> randomObjectsData = new ArrayList<RandomObjectData>();
+		
+		for (RandomObject randomObject : randomObjects) {
+			
+			randomObjectsData.add( new RandomObjectData( randomObject.x, randomObject.y, randomObject.getType() ) );			
+		}
+		
+		try {
+			
+			System.out.println("serializacja " + ClassSerializer.toString(randomObjectsData));
+			
+			return ClassSerializer.toString(randomObjectsData);
+
+		}catch (IOException e) {
+			
+			e.printStackTrace();
+			
+			System.out.println("b³¹d serializacji");
+		}
+		
+		return null;				
+	}
+
+	public void refreschObjects(){
+		
+		removeObjectIndex = -1;
+
+		for (RandomObject randomObject : randomObjects) {
+			
+			if(host.player1.overlaps(randomObject)){
+				
+				randomObject.addEffectsToPlayers(host.player1 , host.player2, host);	
+				
+				randomObject.exist = false;
+			}
+
+			if(host.player2.overlaps(randomObject)){
+				
+				randomObject.addEffectsToPlayers(host.player2, host.player1, host);		
+				
+				randomObject.exist = false;
+			}
+			
+			if(!randomObject.exist){
+				removeObjectIndex = randomObjects.indexOf(randomObject);
+				
+				sendData = true;
+			}
+		}	
+
+		if(removeObjectIndex != -1){
+			
+			randomObjects.remove(removeObjectIndex);
+		}
+	}
+}
