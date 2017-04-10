@@ -7,8 +7,8 @@ import com.mygdx.game.Berek;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = Berek.GAME_WIDTH/2;
-		config.height = Berek.GAME_HEIGHT/2;
+		config.width = Berek.GAME_WIDTH/3;
+		config.height = Berek.GAME_HEIGHT/3;
 		new LwjglApplication(new Berek(), config);
 	}
 }

@@ -20,15 +20,16 @@ public class LobbyRequestListener implements com.shephertz.app42.gaming.multipla
 	public void onGetLiveLobbyInfoDone(LiveRoomInfoEvent arg0) {
 				
 
-		if( arg0.getJoinedUsers().length > 1 ){
-						
-			game.gameScreen.gamePlayObjects.player2.nick = arg0.getJoinedUsers()[0];
+		if( arg0.getJoinedUsers().length >= Berek.PlayersInGame ){
 			
+			for(int i = arg0.getJoinedUsers().length - 1 ; i >= arg0.getJoinedUsers().length - Berek.PlayersInGame ; i--){
+			
+				game.connectionController.potentialPlayersNicks.add( arg0.getJoinedUsers()[i] );			
+			}
+					
 			game.connectionController.host = true;
 			
 			createRoom();
-			        
-			
 		
 		}
 	}
@@ -41,7 +42,7 @@ public class LobbyRequestListener implements com.shephertz.app42.gaming.multipla
        
     	try {
 			
-    		WarpClient.getInstance().createRoom("Berek", "Berek", 2, data);
+    		WarpClient.getInstance().createRoom("Berek", "Berek", Berek.PlayersInGame, data);
 		
     	} catch (Exception e) {
 			

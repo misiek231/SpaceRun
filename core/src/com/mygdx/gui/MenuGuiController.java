@@ -137,8 +137,6 @@ public class MenuGuiController {
 				
 						game.gameScreen = new GameScreen(game);
 						
-						game.gameScreen.gamePlayObjects.player1.nick = game.connectionController.nickName;
-						
 						WarpClient.getInstance().joinLobby();
 						
 						WarpClient.getInstance().subscribeLobby();

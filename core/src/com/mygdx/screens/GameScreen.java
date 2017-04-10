@@ -1,19 +1,29 @@
 package com.mygdx.screens;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.Berek;
 import com.mygdx.game.GamePlayObjects;
+import com.mygdx.hosting.GameState;
+import com.mygdx.players.Player;
+import com.mygdx.players.PlayerTexturesInitializer;
 
 public class GameScreen extends AbstractScreen{
 
 	public GamePlayObjects gamePlayObjects;
 	
+	int gameState;
 	
+	PlayerTexturesInitializer playerTextures;
 	
 	public GameScreen(final Berek game) {
 		
 		super(game);	
 		
+		gameState = GameState.NotStarted;
+		
 		gamePlayObjects = new GamePlayObjects(game);
+		
+		playerTextures = new PlayerTexturesInitializer();
 	}
 	
 
@@ -23,10 +33,7 @@ public class GameScreen extends AbstractScreen{
 		stage.addActor(gamePlayObjects.touchpad);
 		
 		stage.addActor(gamePlayObjects.lRoundTime);
-		
-		stage.addActor(gamePlayObjects.player1.playerNickLabel);
-		
-		stage.addActor(gamePlayObjects.player2.playerNickLabel);
+
 	}
 
 
@@ -38,26 +45,30 @@ public class GameScreen extends AbstractScreen{
 			game.connectionController.hostController.hostRefresh();			
 		}
 		
-		calculateNamePosition();	
+		if(gameState == GameState.Playing){
+		
+			calculateNamePosition();	
 
-		clearScreen();
+			clearScreen();
 		
-		drawBackground();
+			drawBackground();
 	
-		drawBath();
+			drawBath();
 		
-		drawStage();
+			drawStage();
 		
-		game.connectionController.sendDataToHost(gamePlayObjects.touchpad.getKnobPercentX(), gamePlayObjects.touchpad.getKnobPercentY());
-	    	
+			//System.out.println("gameScreenRender");
+			
+			game.connectionController.sendDataToHost(gamePlayObjects.touchpad.getKnobPercentX(), gamePlayObjects.touchpad.getKnobPercentY());
+		}	
 	}
 
 	private void calculateNamePosition() {
 		
-		gamePlayObjects.player1.calculateNamePosition();
-		
-		gamePlayObjects.player2.calculateNamePosition();
-		
+		for (Player player : gamePlayObjects.players) {
+			
+			player.calculateNamePosition();		
+		}		
 	}
 	
 	private void drawBath() {
@@ -66,10 +77,53 @@ public class GameScreen extends AbstractScreen{
 
 		gamePlayObjects.randomObjectsController.drowObjects(batch);
 			
-		batch.draw(gamePlayObjects.player1.getTexture(), gamePlayObjects.player1.getX(), gamePlayObjects.player1.getY(), gamePlayObjects.player1.width, gamePlayObjects.player1.height);
-		 	
-		batch.draw(gamePlayObjects.player2.getTexture(), gamePlayObjects.player2.getX(), gamePlayObjects.player2.getY(), gamePlayObjects.player2.width, gamePlayObjects.player2.height);
-		 
+		System.out.println("drawBath");
+		
+		for (Player player : gamePlayObjects.players) {
+					
+			batch.draw(player.getTexture() , player.getX(), player.getY(), player.width, player.height);	
+		}
+		
 		batch.end();		 
+	}
+	
+
+	public void startGame(String[] recivedText) {
+		
+		gamePlayObjects.players.clear();
+		
+		
+		
+		for(int i = 1 ;i < recivedText.length; i++){
+						
+			System.out.println(recivedText[i]);
+			
+			gamePlayObjects.players.add( new Player(false, recivedText[i], game.skin, playerTextures));		
+		}
+		
+		for (Player player : gamePlayObjects.players) {
+			
+			player.initPlayerNick();
+			
+			stage.addActor(player.playerNickLabel);
+		}
+		
+		gameState = GameState.Playing;
+	}
+
+	public void setPlayerData(int i, float x, float y, boolean isBerek) {
+		
+		
+		
+		gamePlayObjects.players.get(i).x = x;
+		
+		System.out.println(gamePlayObjects.players.get(i).nick + " x: " + gamePlayObjects.players.get(i).x);
+		
+		gamePlayObjects.players.get(i).y = y;
+		
+		System.out.println(gamePlayObjects.players.get(i).nick + " y: " + gamePlayObjects.players.get(i).y);
+		
+		gamePlayObjects.players.get(i).isBerek = isBerek;	
+		
 	}
 }

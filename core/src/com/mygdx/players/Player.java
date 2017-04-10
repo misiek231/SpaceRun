@@ -21,10 +21,6 @@ public class Player extends Rectangle implements java.io.Serializable{
 
 	public Label playerNickLabel;
 	
-	private Texture berekTexture;
-	
-	private Texture noBerekTexture;
-	
 	public String nick;
 	
 	public boolean win = false;
@@ -39,34 +35,34 @@ public class Player extends Rectangle implements java.io.Serializable{
 	
 	public float knobY;
 	
+	PlayerTexturesInitializer textures;
 	
-	public Player(boolean isBerek) {
+	
+	public Player(boolean isBerek, String nick) {
 		
 		this.isBerek = isBerek;
 		
-		setSize(50, 50);
+		this.nick = nick;
+		
+		set(0, 0, 50, 50);
 		
 	}
 	
-	public Player(boolean isBerek, Skin nameSkin){
+	public Player(boolean isBerek, String nick, Skin nameSkin, PlayerTexturesInitializer playersTextures){
 		
-		this.isBerek = isBerek;
+		this(isBerek, nick);
 		
 		this.nameSkin = nameSkin;
 		
-		berekTexture = new Texture("berek_circle.png");
-		
-		noBerekTexture = new Texture("no_berek_circle.png");
-
-		setSize(50, 50);
+		textures = playersTextures;
 	}
 
 	public Texture getTexture() {		
 		
 		if(isBerek)
-			return berekTexture;
+			return textures.berekTexture;
 		else 
-			return noBerekTexture;
+			return textures.noBerekTexture;
 	}
 	
 	public void checkReflection() {		
@@ -113,7 +109,7 @@ public class Player extends Rectangle implements java.io.Serializable{
 	
 	public void initPlayerNick() {
 		
-		playerNickLabel = new Label(nick, nameSkin);
+		playerNickLabel = new Label("nick", nameSkin);
 		
 		playerNickLabel.setPosition(getX() - playerNickLabel.getWidth() , getY() - 20 );
 		

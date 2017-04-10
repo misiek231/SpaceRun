@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.mygdx.hosting.Hosting;
+import com.mygdx.players.Player;
 import com.mygdx.random.objects.EscapeBoost;
 import com.mygdx.random.objects.RandomObject;
 import com.mygdx.random.objects.SlowPlayerObject;
@@ -115,18 +116,14 @@ public class RandomObjectsControlerHost {
 
 		for (RandomObject randomObject : randomObjects) {
 			
-			if(host.player1.overlaps(randomObject)){
+			for (Player player : host.players) {
 				
-				randomObject.addEffectsToPlayers(host.player1 , host.player2, host);	
-				
-				randomObject.exist = false;
-			}
-
-			if(host.player2.overlaps(randomObject)){
-				
-				randomObject.addEffectsToPlayers(host.player2, host.player1, host);		
-				
-				randomObject.exist = false;
+				if(player.overlaps(randomObject)){
+					
+					randomObject.addEffectsToPlayers(player, player, host);	
+					
+					randomObject.exist = false;
+				}
 			}
 			
 			if(!randomObject.exist){

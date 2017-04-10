@@ -1,5 +1,8 @@
 package com.mygdx.connection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONObject;
 
 import com.mygdx.game.Berek;
@@ -23,12 +26,16 @@ public class ConnectionController {
 	
 	public Hosting hostController;
 	
+	public List<String> potentialPlayersNicks;
+	
 	
 	public ConnectionController(Berek game){
 		
 		warpController = new WarpController(game, this);	
 		
 		hostController = new Hosting();
+		
+		potentialPlayersNicks = new ArrayList<String>();
 		
 		hostController.gameState = GameState.NotStarted;
 	}
@@ -43,11 +50,9 @@ public class ConnectionController {
 			
 			data.put("nickName", nickName);
 			
-			data.put("knobX", knobX);  
+			data.put( "knobX", knobX );  
 			
-			data.put("knobY", knobY); 
-			
-			//data.put("objects", game.randomObjectsControler.randomObjects);
+			data.put( "knobY", knobY ); 
 			
 			WarpClient.getInstance().sendUDPUpdatePeers(data.toString().getBytes());			
 						

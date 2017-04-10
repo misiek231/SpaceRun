@@ -1,5 +1,8 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.controler.AnalogStick;
 import com.mygdx.players.Player;
@@ -7,9 +10,7 @@ import com.mygdx.random.controller.RandomObjectsControllerClient;
 
 public class GamePlayObjects {
 	
-	public Player player1;
-	
-	public Player player2;
+	public List<Player> players;
 	
 	public AnalogStick touchpad;
 	
@@ -28,13 +29,7 @@ public class GamePlayObjects {
 	
 	public void init(){
 		
-		player1 = new Player(true, game.skin);
-		
-		player2 = new Player(false, game.skin);
-		
-		player1.initPlayerNick();
-		
-		player2.initPlayerNick();
+		players = new ArrayList<Player>();
 		
 		touchpad = new AnalogStick();
 

@@ -21,10 +21,15 @@ public class ZoneListener implements ZoneRequestListener {
 	public void onCreateRoomDone(RoomEvent arg0) {
 		
 		try {
-			
-			
+					
 			System.out.println("onCreateRoomDone");
-			WarpClient.getInstance().joinAndSubscribeRoom( arg0.getData().getId() );
+						
+			for (String potentialPlayerNick : game.connectionController.potentialPlayersNicks) {
+					
+				WarpClient.getInstance().sendPrivateChat(potentialPlayerNick, "game," + arg0.getData().getId());	
+					
+				System.out.println("invite player: " + potentialPlayerNick);
+			}		
 			
 		} catch (Exception e) {
 

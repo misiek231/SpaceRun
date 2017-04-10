@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.mygdx.game.Berek;
+import com.mygdx.players.Player;
 import com.mygdx.random.controller.RandomObjectData;
 import com.mygdx.serialize.ClassSerializer;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
@@ -29,7 +30,17 @@ public class NotificationListener implements NotifyListener {
 
 	@Override
 	public void onChatReceived(ChatEvent arg0) {
-		System.out.println(arg0.getMessage());
+	
+		System.out.println("onChatReceived: " + arg0.getMessage() );
+		
+		String[] recivedText = arg0.getMessage().split(",");
+		
+		if(recivedText[0].equals("StartGame")){
+			
+			game.gameScreen.startGame(recivedText);
+			
+			game.setScreen(game.gameScreen);
+		}		
 	}
 
 	@Override
@@ -61,42 +72,38 @@ public class NotificationListener implements NotifyListener {
 			
 		if(game.connectionController.host){
 			
-			if(game.gameScreen.gamePlayObjects.player2.nick.equals( arg0 ) && arg1.equals( "gameOk" ) ){
+			if(arg1.equals( "gameOk" ) ){
 				
-				game.connectionController.hostController.initPlayersNick(game.gameScreen.gamePlayObjects.player1.nick, game.gameScreen.gamePlayObjects.player2.nick);
-
-				game.connectionController.hostController.startGame();
+				game.connectionController.hostController.players.add(new Player( false, arg0) );
 				
-				try {
+				System.out.println( "gameOk " + game.connectionController.hostController.players.size() );
+				
+				if(game.connectionController.hostController.players.size() == Berek.PlayersInGame){
 					
-					game.setScreen(game.gameScreen);
-					
-				} catch (Exception e) {
-					
-					e.printStackTrace();
+					game.connectionController.hostController.startGame();
+	
+				//	game.setScreen(game.gameScreen);			
 				}
 			}
 	
-		}else{
+		}
 		
-			String[] recivedData = arg1.split(",");			
+		String[] recivedData = arg1.split(",");			
 			
-			if(recivedData[0].equals("game")){
+		if(recivedData[0].equals("game")){
 				
-				game.connectionController.roomId = recivedData[1];
-				
-				
-				game.gameScreen.gamePlayObjects.player2.nick = arg0;
-				
-				try {
+			game.connectionController.roomId = recivedData[1];
+
+			game.gameScreen.gamePlayObjects.players.add( new Player(true, arg0) );
+	
+			try {
 					
-					WarpClient.getInstance().joinAndSubscribeRoom(recivedData[1]);
+				WarpClient.getInstance().joinAndSubscribeRoom(recivedData[1]);
 					
-				} catch (Exception e) {
+			} catch (Exception e) {
 					
 					e.printStackTrace();
-				}
-			}		
+			}					
 		}
 	}
 
@@ -137,11 +144,12 @@ public class NotificationListener implements NotifyListener {
 				}
 			}else{
 
-				game.gameScreen.gamePlayObjects.player1.setPosition( (float)data.getDouble( game.connectionController.nickName + "x" ), (float)data.getDouble( game.connectionController.nickName + "y" ));
-
-				game.gameScreen.gamePlayObjects.player2.setPosition( (float)data.getDouble( game.gameScreen.gamePlayObjects.player2.nick + "x" ), (float)data.getDouble( game.gameScreen.gamePlayObjects.player2.nick + "y" ));
+				for (Player player : game.gameScreen.gamePlayObjects.players) {
+					
+					game.gameScreen.setPlayerData(game.gameScreen.gamePlayObjects.players.indexOf(player), (float)data.getDouble( player.nick + "x"), (float)data.getDouble( player.nick + "y"), (boolean)data.getBoolean(player.nick + "b") );					
 				
-				game.gameScreen.gamePlayObjects.player1.isBerek = (boolean)data.getBoolean(game.connectionController.nickName + "b");
+				//	System.out.println("player nick: " + player.nick + "player knobx: ");
+				}
 				
 				game.gameScreen.gamePlayObjects.lRoundTime.setText( ( String )data.getString( "time" ) );
 				
@@ -149,10 +157,7 @@ public class NotificationListener implements NotifyListener {
 					game.gameScreen.gamePlayObjects.randomObjectsController.updateObjects( (ArrayList<RandomObjectData>) ClassSerializer.fromString( data.getString("objects") ) );
 				
 					System.out.println("Object Recived");
-				}
-				
-				
-				game.gameScreen.gamePlayObjects.player2.isBerek = !game.gameScreen.gamePlayObjects.player1.isBerek;						           
+				}				           
 			}
 			
 		} catch (JSONException e) {

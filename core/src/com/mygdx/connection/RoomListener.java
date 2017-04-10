@@ -31,40 +31,14 @@ public class RoomListener implements RoomRequestListener {
 		
 		if(arg0.getResult()==WarpResponseResultCode.SUCCESS){ 
 			
-			if(game.connectionController.host){
-	
-				try {
-					
-					WarpClient.getInstance().sendPrivateChat(game.gameScreen.gamePlayObjects.player2.nick, "game," + arg0.getData().getId());
-					
-				} catch (Exception e) {
-					
-					e.printStackTrace();
-				}		
-			}else{
+			try {
 				
-				try {
-					
-					WarpClient.getInstance().sendPrivateChat(game.gameScreen.gamePlayObjects.player2.nick, "gameOk");
-					
-				} catch (Exception e) {
-					
-					e.printStackTrace();
-				}	
+				WarpClient.getInstance().sendPrivateChat(game.gameScreen.gamePlayObjects.players.get(0).nick, "gameOk");
 				
-				Timer.schedule(new Task() {
-					
-					@Override
-					public void run() {
-						game.setScreen(game.gameScreen);
-						
-					}
-	
-				}, 1);
-			}
-			
-		}else {
-  
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}					
 		}		
 	}
 

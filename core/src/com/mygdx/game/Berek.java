@@ -12,6 +12,8 @@ public class Berek extends Game {
 	public static final int GAME_WIDTH = 720;
 	
 	public static final int GAME_HEIGHT = 1280;	//1920×1080
+	
+	public static final int PlayersInGame = 6;
 
 	public Skin skin;
 	

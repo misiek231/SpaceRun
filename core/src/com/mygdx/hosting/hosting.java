@@ -1,5 +1,8 @@
 package com.mygdx.hosting;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONObject;
 
 import com.mygdx.players.Player;
@@ -12,10 +15,8 @@ public class Hosting{
 	
 	public final int ROUND_TIME = 5;
 	
-	public Player player1;
-	
-	public Player player2;
-	
+	public List<Player> players;
+
 	int elapsedTime;
 	
 	String leftGameTime;
@@ -28,9 +29,7 @@ public class Hosting{
 	
 	public Hosting(){
 		
-		player1 = new Player(true);
-		
-		player2 = new Player(false);
+		players = new ArrayList<Player>();
 		
 		randomObjectsControler = new RandomObjectsControlerHost(this);
 
@@ -52,29 +51,19 @@ public class Hosting{
 		
 		randomObjectsControler.refreschObjects();		
 	}
-
-	public void initPlayersNick(String player1Nick, String player2Nick){
-		
-		player1.nick = player1Nick;
-		
-		player2.nick = player2Nick;
-		
-	}
 	
 	public void setPlayersData(String nick, float knobX, float knobY) {
 		
-		if( player1.nick.equals(nick) ){
-			
-			player1.knobX = knobX;
-			
-			player1.knobY = knobY;		
-		}
+		//System.out.println(arg0);
 		
-		if( player2.nick.equals(nick) ){
+		for (Player player : players) {
 			
-			player2.knobX = knobX;
-			
-			player2.knobY = knobY;	
+			if( player.nick.equals(nick) ){
+				
+				player.knobX = knobX;
+				
+				player.knobY = knobY;					
+			}
 		}		
 	}
 	
@@ -82,15 +71,16 @@ public class Hosting{
 		 
 		if(gameState == GameState.Playing){
 			
-			player1.setX( player1.getX() + player1.knobX * player1.playerSpeed);
+			for (Player player : players) {
 			
-	    	player1.setY( player1.getY() + player1.knobY * player1.playerSpeed);
+				player.setX( player.getX() + player.knobX * player.playerSpeed );
+			
+				player.setY( player.getY() + player.knobY * player.playerSpeed );
+	    		
+			}
+			
 	    	
-	    	player2.setX( player2.getX() + player2.knobX * player2.playerSpeed);
-	    	
-	    	player2.setY( player2.getY() + player2.knobY * player2.playerSpeed);
-	    	
-	    	if(player1.overlaps(player2)){
+	    	/*if(player1.overlaps(player2)){
 		    	
 		    	player1.isBerek = !player1.isBerek;
 		    	
@@ -103,11 +93,12 @@ public class Hosting{
 		    	player2.xTorque = -(player1.x - player2.x)/recoilPower;
 		    	
 		    	player2.yTorque = -(player1.y - player2.y)/recoilPower;
-		    }	
+		    }	*/
 	    	
-			player1.checkReflection();
-			
-			player2.checkReflection();
+	    	for (Player player : players) {
+	    		
+	    		player.checkReflection();
+	    	}
 		}		    								
 	}
 		
@@ -119,17 +110,15 @@ public class Hosting{
 			
 			data.put("toHost", false);
 			
-			data.put(player1.nick + "x", player1.getX()); 
+			for (Player player : players) {
 			
-			data.put(player1.nick + "y", player1.getY()); 
+				data.put(player.nick + "x", player.getX()); 
 			
-			data.put(player2.nick + "x", player2.getX()); 
+				data.put(player.nick + "y", player.getY()); 
+				
+				data.put(player.nick + "b", player.isBerek);
 			
-			data.put(player2.nick + "y", player2.getY()); 
-			
-			data.put(player1.nick + "b", player1.isBerek); 
-			
-			data.put(player2.nick + "b", player2.isBerek); 
+			}
 			
 			data.put("time", leftGameTime);
 			
@@ -198,6 +187,22 @@ public class Hosting{
 	}
 
 	public void startGame() {
+		
+		String textToSend = "StartGame";
+		
+		for (Player player : players) {
+			
+			textToSend += "," + player.nick;			
+		}
+				
+		try {
+			
+			WarpClient.getInstance().sendChat(textToSend);
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
 		
 		startTime = System.currentTimeMillis();
 		
