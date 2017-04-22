@@ -1,6 +1,7 @@
 package com.mygdx.screens;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.mygdx.game.Berek;
 import com.mygdx.game.GamePlayObjects;
 import com.mygdx.hosting.GameState;
@@ -15,6 +16,8 @@ public class GameScreen extends AbstractScreen{
 	
 	PlayerTexturesInitializer playerTextures;
 	
+	ParticleEffect pe;
+	
 	public GameScreen(final Berek game) {
 		
 		super(game);	
@@ -24,6 +27,10 @@ public class GameScreen extends AbstractScreen{
 		gamePlayObjects = new GamePlayObjects(game);
 		
 		playerTextures = new PlayerTexturesInitializer();
+		
+		pe = new ParticleEffect();
+	    
+		pe.load(Gdx.files.internal("particle"),Gdx.files.internal(""));
 	}
 	
 
@@ -39,14 +46,11 @@ public class GameScreen extends AbstractScreen{
 
 	@Override
 	public void render(float delta) {
-		
-		if(game.connectionController.host){
-			
-			game.connectionController.hostController.hostRefresh();			
-		}
+
 		
 		if(gameState == GameState.Playing){
 		
+			
 			calculateNamePosition();	
 
 			clearScreen();
@@ -56,10 +60,17 @@ public class GameScreen extends AbstractScreen{
 			drawBath();
 		
 			drawStage();
+			
+			/*for (Player player : gamePlayObjects.players) {
+
+				player.checkReflection(pe);					
+			}*/
+			
 		
-			//System.out.println("gameScreenRender");
+			//pe.update(delta);
 			
 			game.connectionController.sendDataToHost(gamePlayObjects.touchpad.getKnobPercentX(), gamePlayObjects.touchpad.getKnobPercentY());
+
 		}	
 	}
 
@@ -75,15 +86,15 @@ public class GameScreen extends AbstractScreen{
 	
 		batch.begin();	
 
+		//pe.draw(batch);
+
 		gamePlayObjects.randomObjectsController.drowObjects(batch);
-			
-		System.out.println("drawBath");
 		
 		for (Player player : gamePlayObjects.players) {
 					
 			batch.draw(player.getTexture() , player.getX(), player.getY(), player.width, player.height);	
 		}
-		
+
 		batch.end();		 
 	}
 	
@@ -107,7 +118,7 @@ public class GameScreen extends AbstractScreen{
 			
 			stage.addActor(player.playerNickLabel);
 		}
-		
+	
 		gameState = GameState.Playing;
 	}
 
@@ -117,11 +128,11 @@ public class GameScreen extends AbstractScreen{
 		
 		gamePlayObjects.players.get(i).x = x;
 		
-		System.out.println(gamePlayObjects.players.get(i).nick + " x: " + gamePlayObjects.players.get(i).x);
+	//	System.out.println(gamePlayObjects.players.get(i).nick + " x: " + gamePlayObjects.players.get(i).x);
 		
 		gamePlayObjects.players.get(i).y = y;
 		
-		System.out.println(gamePlayObjects.players.get(i).nick + " y: " + gamePlayObjects.players.get(i).y);
+	//	System.out.println(gamePlayObjects.players.get(i).nick + " y: " + gamePlayObjects.players.get(i).y);
 		
 		gamePlayObjects.players.get(i).isBerek = isBerek;	
 		

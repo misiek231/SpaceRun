@@ -11,7 +11,6 @@ import com.mygdx.screens.CustumGameScreen;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.screens.MenuScreen;
 import com.mygdx.screens.OptionsScreen;
-import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 
 public class MenuGuiController {
 	
@@ -137,11 +136,7 @@ public class MenuGuiController {
 				
 						game.gameScreen = new GameScreen(game);
 						
-						WarpClient.getInstance().joinLobby();
-						
-						WarpClient.getInstance().subscribeLobby();
-						
-						WarpClient.getInstance().getLiveLobbyInfo();
+						game.connectionController.joinLobby();
 	
 					} catch (Exception e) {
 

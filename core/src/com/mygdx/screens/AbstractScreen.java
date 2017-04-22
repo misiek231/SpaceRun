@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Berek;
-import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 
 
 public abstract class AbstractScreen implements Screen {
@@ -102,16 +101,5 @@ public abstract class AbstractScreen implements Screen {
 		stage.draw();
 		
 	}
-	
-	protected void refreschRooms() {
-		
-		try{
-			
-			WarpClient.getInstance().getLiveRoomInfo(game.connectionController.roomId);
-			
-		}catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-	}
+
 }

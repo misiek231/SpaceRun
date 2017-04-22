@@ -20,12 +20,12 @@ public class RandomObjectsControllerClient {
 	
 	public void updateObjects(ArrayList<RandomObjectData> randomObjectsData){
 	
+		
 		randomObjects.clear();
 		
 		for (RandomObjectData randomObjectData : randomObjectsData) {
 			
 			randomObjects.add( new RandomObjectClient (randomObjectData.x, randomObjectData.y, randomObjectData.objectType, ObjectsTexture ) );
-
 		}	
 	}
 	

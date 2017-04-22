@@ -3,7 +3,6 @@ package com.mygdx.screens;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.Berek;
 import com.mygdx.gui.NameScreenGuiController;
-import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
 
 public class NameScreen extends AbstractScreen {
 
@@ -45,7 +44,7 @@ public class NameScreen extends AbstractScreen {
 		
 		if(game.connectionController.connectionResult != 100){
 			
-			if(game.connectionController.connectionResult == WarpResponseResultCode.SUCCESS){
+			if(game.connectionController.connectionResult == 1){
 				
 				game.setScreen(new MenuScreen(game));
 				
@@ -55,10 +54,24 @@ public class NameScreen extends AbstractScreen {
 				
 			}else{
 				
+				if(game.connectionController.connectionResult == 2){
+					
+					guiController.errorType.setText("Nick zajêty. Spróbuj ponownie");
+				}
+				
+				if(game.connectionController.connectionResult == 3){
+					
+					guiController.errorType.setText("Unknown host: 192.168.56.1");
+				}
+				
+				if(game.connectionController.connectionResult == 4){
+					
+					guiController.errorType.setText("No I/O");
+				}
+				
 				guiController.errorType.setVisible(true);
 				
-				guiController.connecting = false;
-			
+				guiController.connecting = false;		
 			}
 		}
 	}

@@ -1,6 +1,5 @@
 package com.mygdx.random.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.math.MathUtils;
@@ -13,7 +12,6 @@ import com.mygdx.random.objects.RandomObject;
 import com.mygdx.random.objects.SlowPlayerObject;
 import com.mygdx.random.objects.SpeedBoster;
 import com.mygdx.random.objects.TimeBoost;
-import com.mygdx.serialize.ClassSerializer;
 
 public class RandomObjectsControlerHost {
 	
@@ -47,7 +45,6 @@ public class RandomObjectsControlerHost {
 						
 							randomObjects.add(new SpeedBoster()); 
 							
-							System.out.println("object added");
 						
 							break;
 							
@@ -55,7 +52,6 @@ public class RandomObjectsControlerHost {
 							
 							randomObjects.add(new SlowPlayerObject());
 							
-							System.out.println("object added");
 						
 							break;
 							
@@ -63,7 +59,6 @@ public class RandomObjectsControlerHost {
 							
 							randomObjects.add(new EscapeBoost()); 
 							
-							System.out.println("object added");
 						
 							break;
 							
@@ -71,7 +66,6 @@ public class RandomObjectsControlerHost {
 							
 							randomObjects.add(new TimeBoost()); 
 							
-							System.out.println("object added");
 						
 							break;
 						
@@ -94,9 +88,8 @@ public class RandomObjectsControlerHost {
 			randomObjectsData.add( new RandomObjectData( randomObject.x, randomObject.y, randomObject.getType() ) );			
 		}
 		
-		try {
+/*		try {
 			
-			System.out.println("serializacja " + ClassSerializer.toString(randomObjectsData));
 			
 			return ClassSerializer.toString(randomObjectsData);
 
@@ -105,7 +98,7 @@ public class RandomObjectsControlerHost {
 			e.printStackTrace();
 			
 			System.out.println("b³¹d serializacji");
-		}
+		}*/
 		
 		return null;				
 	}

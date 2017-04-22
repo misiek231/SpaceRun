@@ -1,6 +1,8 @@
 package com.mygdx.players;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -44,8 +46,8 @@ public class Player extends Rectangle implements java.io.Serializable{
 		
 		this.nick = nick;
 		
-		set(0, 0, 50, 50);
-		
+		set(MathUtils.random(300, 670), MathUtils.random(300, 1230), 50, 50);
+
 	}
 	
 	public Player(boolean isBerek, String nick, Skin nameSkin, PlayerTexturesInitializer playersTextures){
@@ -104,6 +106,40 @@ public class Player extends Rectangle implements java.io.Serializable{
 	 	    x += xTorque;
 	 	    y += yTorque;
 
+		}
+	}
+	
+	public void checkReflection(ParticleEffect pe) {		
+		
+		if(checkReflection){
+			
+			if(x < 10){
+				
+				 pe.getEmitters().first().setPosition(0 ,y + height/2);
+				   
+				 pe.start();				
+			}
+			
+			if(x > Berek.GAME_WIDTH - 60){
+				 pe.getEmitters().first().setPosition(Berek.GAME_WIDTH, y + height / 2);
+				   
+				 pe.start();
+									
+			}
+			
+			if(y < 10){
+				 pe.getEmitters().first().setPosition( x + width / 2 , 0);
+				   
+				 pe.start();
+									
+			}
+			
+			if(y > Berek.GAME_HEIGHT - 60){
+				
+				 pe.getEmitters().first().setPosition(x + width / 2, Berek.GAME_HEIGHT);
+				   
+				 pe.start();
+			}
 		}
 	}
 	

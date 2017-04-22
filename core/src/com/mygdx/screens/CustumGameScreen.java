@@ -44,11 +44,8 @@ public class CustumGameScreen extends AbstractScreen {
 		
 		connecting();
 		
-		refreschRooms();
-		
 		connectingResult();
-		
-		
+				
 		clearScreen();
 		
 		drawBackground();		

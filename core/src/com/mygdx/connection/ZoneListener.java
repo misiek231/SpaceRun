@@ -1,23 +1,16 @@
 package com.mygdx.connection;
 
 import com.mygdx.game.Berek;
-import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
-import com.shephertz.app42.gaming.multiplayer.client.events.AllRoomsEvent;
-import com.shephertz.app42.gaming.multiplayer.client.events.AllUsersEvent;
-import com.shephertz.app42.gaming.multiplayer.client.events.LiveUserInfoEvent;
-import com.shephertz.app42.gaming.multiplayer.client.events.MatchedRoomsEvent;
-import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent;
-import com.shephertz.app42.gaming.multiplayer.client.listener.ZoneRequestListener;
 
-public class ZoneListener implements ZoneRequestListener {
+public class ZoneListener {
 
 	Berek game;
 	
 	public ZoneListener(Berek game) {
 		this.game = game;
 	}
-
-	@Override
+}
+	/*@Override
 	public void onCreateRoomDone(RoomEvent arg0) {
 		
 		try {
@@ -83,3 +76,4 @@ public class ZoneListener implements ZoneRequestListener {
 	}
 
 }
+*/

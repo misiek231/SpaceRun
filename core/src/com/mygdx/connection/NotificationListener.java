@@ -1,34 +1,78 @@
 package com.mygdx.connection;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mygdx.game.Berek;
 import com.mygdx.players.Player;
 import com.mygdx.random.controller.RandomObjectData;
-import com.mygdx.serialize.ClassSerializer;
-import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
-import com.shephertz.app42.gaming.multiplayer.client.events.ChatEvent;
-import com.shephertz.app42.gaming.multiplayer.client.events.LobbyData;
-import com.shephertz.app42.gaming.multiplayer.client.events.MoveEvent;
-import com.shephertz.app42.gaming.multiplayer.client.events.RoomData;
-import com.shephertz.app42.gaming.multiplayer.client.events.UpdateEvent;
-import com.shephertz.app42.gaming.multiplayer.client.listener.NotifyListener;
 
-public class NotificationListener implements NotifyListener {
+
+public class NotificationListener {
 
 	Berek game;
 
+	Gson serializer;
 	
 	public NotificationListener(Berek game) {
 		this.game = game;
+		
+		serializer = new Gson();
 	}
 
-	@Override
+	
+	@SuppressWarnings("unchecked")
+	public void OnDataRecived(String data) {
+		
+		//System.out.println("OnDataRecived: " + data );
+		
+		String[] recivedText = data.split("@");
+		
+		if(recivedText[0].equals("StartGame")){
+			
+			game.gameScreen.startGame(recivedText);
+			
+			game.setScreen(game.gameScreen);
+		}	
+		else if(recivedText[0].equals("GameData")){
+			
+			try {
+				
+				JSONObject jsonData = new JSONObject(new String( recivedText[1] ) );
+				
+				for (Player player : game.gameScreen.gamePlayObjects.players) {
+					
+					game.gameScreen.setPlayerData(
+						game.gameScreen.gamePlayObjects.players.indexOf(player), 
+						(float)jsonData.getDouble( player.nick + "x"), 
+						(float)jsonData.getDouble( player.nick + "y"), 
+						(boolean)jsonData.getBoolean(player.nick + "b") 
+					);									
+				}
+				
+				game.gameScreen.gamePlayObjects.lRoundTime.setText( ( String )jsonData.getString( "time" ) );
+
+				game.gameScreen.gamePlayObjects.randomObjectsController.updateObjects(
+					(ArrayList<RandomObjectData>) serializer.fromJson(
+						jsonData.getString("objects"), 
+						new TypeToken< ArrayList<RandomObjectData> >(){}.getType() 
+					) 
+				);
+		
+			} catch (JSONException e) {
+				
+				e.printStackTrace();				
+			} 				
+		}
+	}	
+}
+	
+	
+	/*@Override
 	public void onChatReceived(ChatEvent arg0) {
 	
 		System.out.println("onChatReceived: " + arg0.getMessage() );
@@ -131,7 +175,8 @@ public class NotificationListener implements NotifyListener {
 	@Override
 	public void onUpdatePeersReceived(UpdateEvent arg0) {
 		
-
+		
+		
 		try {
 			
 			JSONObject data = new JSONObject(new String( arg0.getUpdate() ) );
@@ -141,22 +186,25 @@ public class NotificationListener implements NotifyListener {
 				if(game.connectionController.host){
 
 					game.connectionController.hostController.setPlayersData(data.getString("nickName"), (float)data.getDouble("knobX"), (float)data.getDouble("knobY"));
+						
+					System.out.println("host knob " + data.getString("nickName") + ": X-" + (float)data.getDouble("knobX") + " Y-" + (float)data.getDouble("knobY") );
+
 				}
 			}else{
-
+				
 				for (Player player : game.gameScreen.gamePlayObjects.players) {
 					
 					game.gameScreen.setPlayerData(game.gameScreen.gamePlayObjects.players.indexOf(player), (float)data.getDouble( player.nick + "x"), (float)data.getDouble( player.nick + "y"), (boolean)data.getBoolean(player.nick + "b") );					
 				
+					
 				//	System.out.println("player nick: " + player.nick + "player knobx: ");
 				}
 				
 				game.gameScreen.gamePlayObjects.lRoundTime.setText( ( String )data.getString( "time" ) );
 				
 				if(data.getBoolean("isObjects")){
+					
 					game.gameScreen.gamePlayObjects.randomObjectsController.updateObjects( (ArrayList<RandomObjectData>) ClassSerializer.fromString( data.getString("objects") ) );
-				
-					System.out.println("Object Recived");
 				}				           
 			}
 			
@@ -217,3 +265,4 @@ public class NotificationListener implements NotifyListener {
 	}
 
 }
+*/

@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Berek;
-import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 
 public class NameScreenGuiController {
 	
@@ -75,25 +74,12 @@ public class NameScreenGuiController {
 				if(!connecting){
 				
 					connecting = true;
-					
-					
-				
-					try {
-					
-						
-						game.connectionController.nickName = name.getText();
-						
-						WarpClient.getInstance().connectWithUserName(name.getText());
-						
-					//game.setScreen(new GameScreen(game));
-					} catch (Exception e) {
 
-						System.out.println("B£AD £ACZENIA");
-						
-						errorType.setVisible(true);
-					}
-				}
-				
+					game.connectionController.nickName = name.getText();
+					
+					game.connectionController.connectWithNickName(name.getText());
+	
+				}			
 				super.clicked(event, x, y);
 			};			
 		});

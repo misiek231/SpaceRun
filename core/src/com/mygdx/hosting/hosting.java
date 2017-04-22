@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import com.badlogic.gdx.math.MathUtils;
+import com.mygdx.game.Berek;
 import com.mygdx.players.Player;
 import com.mygdx.random.controller.RandomObjectsControlerHost;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
@@ -56,6 +58,8 @@ public class Hosting{
 		
 		//System.out.println(arg0);
 		
+		
+		
 		for (Player player : players) {
 			
 			if( player.nick.equals(nick) ){
@@ -78,23 +82,32 @@ public class Hosting{
 				player.setY( player.getY() + player.knobY * player.playerSpeed );
 	    		
 			}
-			
-	    	
-	    	/*if(player1.overlaps(player2)){
-		    	
-		    	player1.isBerek = !player1.isBerek;
-		    	
-		    	player2.isBerek = !player1.isBerek;
-		    	
-		    	player1.xTorque = (player1.x - player2.x)/recoilPower;
-		    	
-		    	player1.yTorque = (player1.y - player2.y)/recoilPower;
-		    	
-		    	player2.xTorque = -(player1.x - player2.x)/recoilPower;
-		    	
-		    	player2.yTorque = -(player1.y - player2.y)/recoilPower;
-		    }	*/
-	    	
+						
+			for (Player player1 : players) {	
+				
+				for (Player player2 : players) {
+	
+					if( player1.overlaps( player2 ) && player1 != player2){
+						
+						if(player1.isBerek){
+														
+							player1.isBerek = !player1.isBerek;
+					    	
+							player2.isBerek = !player1.isBerek;					    	
+						}
+							
+						player1.xTorque = ( player1.x - player2.x ) / recoilPower;
+					    	
+						player1.yTorque = ( player1.y - player2.y ) / recoilPower;
+					    	
+						player2.xTorque = -(player1.x - player2.x ) / recoilPower;
+					    	
+						player2.yTorque = -(player1.y - player2.y ) / recoilPower;
+						
+					}
+				}					
+			}
+
 	    	for (Player player : players) {
 	    		
 	    		player.checkReflection();
@@ -202,6 +215,16 @@ public class Hosting{
 		} catch (Exception e) {
 			
 			e.printStackTrace();
+		}
+		
+		int playerBerekIndex = MathUtils.random(0, Berek.PlayersInGame-1);
+		
+		for(int i = 0; i <Berek.PlayersInGame; i++){
+			
+			if(i == playerBerekIndex)
+				players.get(i).isBerek = true;
+			else 
+				players.get(i).isBerek = false;			
 		}
 		
 		startTime = System.currentTimeMillis();

@@ -1,13 +1,8 @@
 package com.mygdx.connection;
 
-import java.util.HashMap;
-
 import com.mygdx.game.Berek;
-import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
-import com.shephertz.app42.gaming.multiplayer.client.events.LiveRoomInfoEvent;
-import com.shephertz.app42.gaming.multiplayer.client.events.LobbyEvent;
 
-public class LobbyRequestListener implements com.shephertz.app42.gaming.multiplayer.client.listener.LobbyRequestListener {
+public class LobbyRequestListener{
 
 	Berek game; 
 	
@@ -16,6 +11,10 @@ public class LobbyRequestListener implements com.shephertz.app42.gaming.multipla
 		this.game = game;
 	}
 
+	
+}
+	
+/*	
 	@Override
 	public void onGetLiveLobbyInfoDone(LiveRoomInfoEvent arg0) {
 				
@@ -77,3 +76,4 @@ public class LobbyRequestListener implements com.shephertz.app42.gaming.multipla
 	}
 
 }
+*/
